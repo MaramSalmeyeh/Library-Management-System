@@ -6,7 +6,7 @@ public class Book {
 	    public String getAuthor() { return null; }
 	    public String getIsbn() { return null; }
 	    public boolean isAvailable() { return true; }
-	    boolean matches(String q) { return false; }
-	    void markBorrowed() {}
-	    void markReturned() {}
+	    public boolean matches(String q) { return false; }
+	    public void markBorrowed() {}
+	    public void markReturned() {}
 }
