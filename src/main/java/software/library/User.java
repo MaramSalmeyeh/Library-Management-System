@@ -1,17 +1,39 @@
 package software.library;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-	  public User(String id, String name) {}
+	private final String id;
+	private final String name;
+	private final List<Book> borrowed = new ArrayList<>();
 
-	    public String getId() { return null; }
-	    public String getName() { return null; }
+	public User(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
-	    
-	    public boolean borrow(Book book) { return false; }
-	    public boolean returnBook(Book book) { return false; }
-	    public boolean hasBorrowed(String isbn) { return false; }
-	    public List<Book> getBorrowed() { return java.util.List.of(); }
-	    public int countBorrowed() { return 0; }
+	public String getId()   { return id; }
+	public String getName() { return name; }
+
+	public boolean borrow(Book book) {
+		if (!book.isAvailable()) return false;
+		book.markBorrowed();
+		borrowed.add(book);
+		return true;
+	}
+
+	public boolean returnBook(Book book) {
+		if (!borrowed.remove(book)) return false;
+		book.markReturned();
+		return true;
+	}
+
+	public boolean hasBorrowed(String isbn) {
+		return borrowed.stream().anyMatch(b -> b.getIsbn().equals(isbn));
+	}
+
+	public List<Book> getBorrowed() { return new java.util.ArrayList<>(borrowed); }
+
+	public int countBorrowed() { return borrowed.size(); }
 }
