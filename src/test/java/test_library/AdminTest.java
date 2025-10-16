@@ -1,42 +1,65 @@
 package test_library;
 
-import org.junit.jupiter.api.Test;
-import software.library.Admin;
-import software.library.Book;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import org.junit.jupiter.api.*;
+import software.library.*;
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AdminTest {
 
-    @Test
-    void login_withValidCredentials_succeeds_and_logout_blocksActions() {
-        Admin a = new Admin("admin", "admin");
-        assertTrue(a.login("admin","admin"));     // US1.1
-        assertTrue(a.isLoggedIn());
-        a.logout();                               // US1.2
-        assertFalse(a.isLoggedIn());
+    private Admin admin;
+    private List<Book> catalog;
 
-        List<Book> catalog = new ArrayList<>();
+    @BeforeAll
+    void beforeAll() {
+        System.out.println("BeforeAll(AdminTest)");
+    }
+
+    @AfterAll
+    void afterAll() {
+        System.out.println("AfterAll(AdminTest)");
+    }
+
+    @BeforeEach
+    void setUp() {
+        admin = new Admin("root", "1234");
+        catalog = new ArrayList<>();
+    }
+
+    @AfterEach
+    void tearDown() {
+        admin = null;
+        catalog = null;
+    }
+
+    @Test
+    @DisplayName("Login/Logout and addBook requires login")
+    void login_logout_and_addBook_requires_login() {
+        // before login
+        assertFalse(admin.isLoggedIn());
         assertThrows(IllegalStateException.class,
-                () -> a.addBook(catalog, new Book("T","A","ISBN")));
-    }
+                () -> admin.addBook(catalog, new Book("X", "Y", "Z")));
 
-    @Test
-    void login_withInvalidCredentials_fails() {
-        Admin a = new Admin("admin","admin");
-        assertFalse(a.login("wrong","pass"));
-        assertFalse(a.isLoggedIn());
-    }
+        // login
+        assertTrue(admin.login("root", "1234"));
+        assertTrue(admin.isLoggedIn());
 
-    @Test
-    void addBook_whenLoggedIn_addsAndIsSearchable() {
-        Admin a = new Admin("admin","admin");
-        List<Book> catalog = new ArrayList<>();
-        a.login("admin","admin");
-        assertTrue(a.addBook(catalog, new Book("Clean Code","Robert C. Martin","9780132350884"))); // US1.3
+        // add book when logged in
+        assertTrue(admin.addBook(catalog, new Book("Engineering", "Maram", "9780132350884")));
         assertEquals(1, catalog.size());
+
+        // logout blocks actions
+        admin.logout();
+        assertFalse(admin.isLoggedIn());
+        assertThrows(IllegalStateException.class,
+                () -> admin.addBook(catalog, new Book("Another", "Author", "111")));
+    }
+
+    @Test
+    @DisplayName("Invalid login fails")
+    void invalid_login_fails() {
+        assertFalse(admin.login("root", "wrong"));
+        assertFalse(admin.isLoggedIn());
     }
 }
