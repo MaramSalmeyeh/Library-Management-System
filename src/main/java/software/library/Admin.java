@@ -15,7 +15,7 @@ public class Admin {
         return false;
     }
 
-    public boolean addBook(List catalog, Book book) {
+    public boolean addBook(List<Book> catalog, Book book) {
         return false;  
     }
 }
