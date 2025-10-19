@@ -1,7 +1,9 @@
 package test_library;
 
 import org.junit.jupiter.api.*;
-import software.library.*;
+
+import library.*;
+
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 

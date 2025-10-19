@@ -1,4 +1,4 @@
-package software.library;
+package library;
 
 public class Book {
 	private final String title;

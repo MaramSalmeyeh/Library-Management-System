@@ -1,7 +1,9 @@
 package test_library;
 
 import org.junit.jupiter.api.*;
-import software.library.*;
+
+import library.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

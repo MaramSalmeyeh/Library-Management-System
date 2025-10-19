@@ -1,4 +1,4 @@
-package software.library;
+package library;
 
 import java.util.List;
 import java.util.Objects;
