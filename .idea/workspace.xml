@@ -4,33 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Library/Admin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Library/Book.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Library/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/test_library/UserTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/AdminService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/BookService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/entities/Admin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/entities/Book.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/entities/Librarian.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Library/Librarian.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/entities/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/persistence/AdminRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/persistence/BookRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/persistence/InMemoryBookRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/app/AdminServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/app/BookServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/domain/entities/AdminTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test_library/AdminTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/domain/entities/BookTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/domain/entities/LibrarianTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test_library/BookTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/domain/entities/UserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test_library/LibrarianTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -136,7 +110,7 @@
       <workItem from="1759400531997" duration="1167000" />
       <workItem from="1760518641812" duration="85000" />
       <workItem from="1760897502294" duration="3480000" />
-      <workItem from="1760902207536" duration="6333000" />
+      <workItem from="1760902207536" duration="6784000" />
     </task>
     <servers />
   </component>
