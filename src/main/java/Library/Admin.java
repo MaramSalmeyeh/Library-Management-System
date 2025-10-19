@@ -1,4 +1,4 @@
-package domain.entities;
+package Library;
 
 import java.util.List;
 import java.util.Objects;

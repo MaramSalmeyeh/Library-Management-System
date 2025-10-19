@@ -4,15 +4,60 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="" />
+    <list default="true" id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Library/Admin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Library/Book.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Library/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/test_library/UserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/AdminService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/BookService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/domain/entities/Admin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/domain/entities/Book.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/domain/entities/Librarian.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Library/Librarian.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/domain/entities/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/persistence/AdminRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/persistence/BookRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/persistence/InMemoryBookRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/app/AdminServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/app/BookServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/domain/entities/AdminTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test_library/AdminTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/domain/entities/BookTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/domain/entities/LibrarianTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test_library/BookTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test_library/domain/entities/UserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test_library/LibrarianTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;aseelqusy&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MaramSalmeyeh/Library-Management-System-.git&quot;,
+    &quot;accountId&quot;: &quot;207048d6-8a99-4837-a8fe-9fad3019db7e&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -23,10 +68,13 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.All in library-sys.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/DELL/Desktop/ف1 سنة 4/software/Lib-sys-pro",
     "node.js.detected.package.eslint": "true",
@@ -40,7 +88,20 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="Library" />
+    </key>
+  </component>
   <component name="RunManager">
+    <configuration name="All in library-sys" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="library-sys" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
@@ -50,6 +111,11 @@
       <option name="filePath" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in library-sys" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -61,7 +127,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="012706a9-a623-4683-826d-542c858ea01e" name="Changes" comment="" />
+      <changelist id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="" />
       <created>1759398319967</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -69,6 +135,8 @@
       <workItem from="1759398321200" duration="765000" />
       <workItem from="1759400531997" duration="1167000" />
       <workItem from="1760518641812" duration="85000" />
+      <workItem from="1760897502294" duration="3480000" />
+      <workItem from="1760902207536" duration="6333000" />
     </task>
     <servers />
   </component>

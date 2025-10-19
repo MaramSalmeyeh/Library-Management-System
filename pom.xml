@@ -3,6 +3,11 @@
   <groupId>softwareCourse</groupId>
   <artifactId>library-sys</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+    <properties>
+        <!-- Set Java 21 as the target release -->
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
   <dependencies>
     <!-- JUnit 5 -->
     <dependency>
@@ -30,6 +35,17 @@
 
 <build>
     <plugins>
+        <!-- Ensure the Maven Compiler plugin targets Java 21 -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.11.0</version>
+            <configuration>
+                <!-- Use the release flag which sets source/target and cross-compiles where possible -->
+                <release>${maven.compiler.release}</release>
+            </configuration>
+        </plugin>
+
         <!-- Jacoco for code coverage -->
         <plugin>
             <groupId>org.jacoco</groupId>
@@ -47,6 +63,29 @@
                     <goals>
                         <goal>report</goal>
                     </goals>
+                </execution>
+            </executions>
+        </plugin>
+        
+        <!-- Enforce JDK version -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>3.2.1</version>
+            <executions>
+                <execution>
+                    <id>enforce-java</id>
+                    <goals>
+                        <goal>enforce</goal>
+                    </goals>
+                    <configuration>
+                        <rules>
+                            <requireJavaVersion>
+                                <version>21</version>
+                            </requireJavaVersion>
+                        </rules>
+                        <fail>true</fail>
+                    </configuration>
                 </execution>
             </executions>
         </plugin>
