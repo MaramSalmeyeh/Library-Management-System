@@ -1,7 +1,7 @@
-package test_library;
+package com.library.domain.model;
 
 import org.junit.jupiter.api.*;
-import Library.Book;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 // Allows @BeforeAll/@AfterAll to be non-static (optional)

@@ -1,4 +1,4 @@
-package Library;
+package com.library.domain.model;
 
 public class Book {
     private final String title;
