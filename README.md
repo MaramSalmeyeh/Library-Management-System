@@ -1,32 +1,54 @@
-Library Management System - Java 21 Upgrade
+# Library Management System (Fall 2025)
 
-This project has been updated to target Java 21 (LTS).
+This project is part of the **Software Engineering course** for Fall 2025.  
+It is a simple Library Management System built using **Java** and **Maven**.
 
-Requirements
+---
 
-- JDK 21 installed and JAVA_HOME set
-- Maven 3.8+
+## Team Members
+- Aseel
+- Maram
 
-Install JDK 21 on Windows (example using Adoptium/Eclipse Temurin):
+---
 
-1. Download and install Temurin JDK 21 from https://adoptium.net
-2. Set JAVA_HOME and add to PATH in PowerShell (run as Administrator):
+## Project Overview
+The system allows:
+- Admins to log in, log out, and manage books
+- Users to search and borrow books
+- Detection of overdue books and fine calculation
+- Sending reminder messages to users
 
-$env:JAVA_HOME = 'C:\Program Files\Eclipse Adoptium\jdk-21'
-[Environment]::SetEnvironmentVariable('JAVA_HOME', $env:JAVA_HOME, 'Machine')
-$env:Path = $env:JAVA_HOME + '\\bin;' + $env:Path
-[Environment]::SetEnvironmentVariable('Path', $env:Path, 'Machine')
+---
 
-Verify:
+## Architecture
+- **Presentation Layer:** Handles user input/output
+- **Service Layer:** Business logic (borrow, pay fine, send reminder)
+- **Domain Layer:** Core entities (Book, User, Loan, Fine)
 
-java -version
-mvn -v
+---
 
-Build and run tests
+## Design Patterns
+- **Strategy Pattern:** For fine calculation
+- **Observer Pattern:** For notifications
 
-mvn -U -DskipTests=false test
+---
 
-Notes
+## Tools & Testing
+- Java 8+
+- Maven
+- JUnit 5 & Mockito
+- Jacoco for code coverage
 
-- The project uses the Maven Compiler plugin with <release>21 and the Maven Enforcer plugin to require Java 21.
-- If you don't have the Copilot upgrade tooling available, the upgrade was performed manually by updating build configuration and adding enforcement rules.
+---
+
+## Notion Task Board
+📋 [View our Notion task table](https://www.notion.so/298f8ceaa0fe808fa01bcadaf74b18e7)
+
+---
+
+## How to Run
+1. Install JDK 8 or higher
+2. Import the project into Eclipse or IntelliJ
+3. Run using:
+   ```bash
+   mvn test
