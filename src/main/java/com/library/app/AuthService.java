@@ -1,16 +1,30 @@
 package com.library.app;
 
-import com.library.domain.model.Admin;
-import java.util.Objects;
 public class AuthService {
-    public boolean login(Admin admin, String username, String passwordPlain) {
-        boolean success = Objects.equals(admin.getUsername(), username)
-                && Objects.equals(admin.getPasswordPlain(), passwordPlain);
-        admin.setLoggedIn(success);
-        return success;
+    private boolean loggedIn = false;
+
+    // غير كلمة المرور هنا
+    private final String USERNAME = "admin";
+    private final String PASSWORD = "password123";  // ✅ تأكد إنه هاد بالضبط
+
+    public boolean login(String username, String password) {
+        System.out.println("Debug: Username='" + username + "', Password='" + password + "'");
+
+        if (USERNAME.equals(username) && PASSWORD.equals(password)) {
+            loggedIn = true;
+            System.out.println("✅ Login successful!");
+            return true;
+        } else {
+            System.out.println("❌ Login failed! Expected: '" + PASSWORD + "'");
+            return false;
+        }
     }
 
-    public void logout(Admin admin) {
-        admin.setLoggedIn(false);
+    public void logout() {
+        loggedIn = false;
+    }
+
+    public boolean isAdminLoggedIn() {
+        return loggedIn;
     }
 }

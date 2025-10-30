@@ -1,31 +1,41 @@
 package com.library.domain.model;
 
+/**
+ * Represents a book in the library system
+ */
 public class Book {
-    private final String title;
-    private final String author;
-    private final String isbn;
-    private boolean available = true;
+    private String isbn;
+    private String title;
+    private String author;
+    private boolean available;
 
-    public Book(String title, String author, String isbn) {
+    public Book(String isbn, String title, String author) {
+        this.isbn = isbn;
         this.title = title;
         this.author = author;
-        this.isbn = isbn;
+        this.available = true;
     }
 
-    public String getTitle()  { return title; }
+    // Getters
+    public String getIsbn() { return isbn; }
+    public String getTitle() { return title; }
     public String getAuthor() { return author; }
-    public String getIsbn()   { return isbn; }
-
     public boolean isAvailable() { return available; }
 
-
-    public boolean matches(String q) {
-        String k = q.toLowerCase();
-        return title.toLowerCase().contains(k)
-                || author.toLowerCase().contains(k)
-                || isbn.toLowerCase().contains(k);
+    public void markBorrowed() {
+        this.available = false;
     }
 
-    public void markBorrowed() { available = false; }
-    public void markReturned() { available = true; }
+    public void markReturned() {
+        this.available = true;
+    }
+
+    /**
+     * String representation with availability status
+     */
+    @Override
+    public String toString() {
+        return title + " by " + author + " (ISBN: " + isbn + ") - " +
+                (available ? "Available" : "Borrowed");
+    }
 }
