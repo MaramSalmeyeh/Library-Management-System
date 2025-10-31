@@ -17,7 +17,7 @@ public class BookRepository {
     }
 
     public List<Book> findAll() {
-        return new ArrayList<>(books.values()); // ✅ دائماً ترجع قائمة
+        return new ArrayList<>(books.values());
     }
 
     public void delete(String isbn) {

@@ -34,29 +34,29 @@ public class OverdueService {
      */
     public void startAutomaticOverdueScanning() {
         if (isScannerRunning) {
-            System.out.println("⚠️ Overdue scanner is already running");
+            System.out.println("⚠ Overdue scanner is already running");
             return;
         }
 
-        System.out.println("🚀 Starting automatic overdue scanner...");
+        System.out.println(" Starting automatic overdue scanner...");
         isScannerRunning = true;
 
-        // Schedule daily scan at 8:00 AM
+
         long initialDelay = calculateInitialDelay();
         long period = TimeUnit.DAYS.toMillis(1); // 24 hours
 
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                System.out.println("🕐 Scheduled overdue scan started at: " + LocalDate.now());
+                System.out.println(" Scheduled overdue scan started at: " + LocalDate.now());
                 checkAndProcessOverdueItems();
-                System.out.println("✅ Scheduled overdue scan completed");
+                System.out.println(" Scheduled overdue scan completed");
             } catch (Exception e) {
-                System.out.println("❌ Error in scheduled overdue scan: " + e.getMessage());
+                System.out.println(" Error in scheduled overdue scan: " + e.getMessage());
             }
         }, initialDelay, period, TimeUnit.MILLISECONDS);
 
-        System.out.println("✅ Automatic overdue scanner started successfully");
-        System.out.println("📅 Next scan in: " + (initialDelay / (1000 * 60 * 60)) + " hours");
+        System.out.println(" Automatic overdue scanner started successfully");
+        System.out.println(" Next scan in: " + (initialDelay / (1000 * 60 * 60)) + " hours");
     }
 
     /**
@@ -64,21 +64,21 @@ public class OverdueService {
      */
     public void stopAutomaticOverdueScanning() {
         if (!isScannerRunning) {
-            System.out.println("⚠️ Overdue scanner is not running");
+            System.out.println(" Overdue scanner is not running");
             return;
         }
 
-        System.out.println("🛑 Stopping automatic overdue scanner...");
+        System.out.println(" Stopping automatic overdue scanner...");
         scheduler.shutdown();
         isScannerRunning = false;
-        System.out.println("✅ Automatic overdue scanner stopped");
+        System.out.println(" Automatic overdue scanner stopped");
     }
 
     /**
      * Manual trigger for overdue detection (US2.2)
      */
     public void checkAndProcessOverdueItems() {
-        System.out.println("🔍 Scanning for overdue items...");
+        System.out.println(" Scanning for overdue items...");
 
         List<Loan> activeLoans = loanRepository.findActiveLoans();
         int totalProcessed = 0;
@@ -93,15 +93,15 @@ public class OverdueService {
             totalProcessed++;
         }
 
-        System.out.println("📊 Scan results:");
+        System.out.println(" Scan results:");
         System.out.println("   - Total loans checked: " + totalProcessed);
         System.out.println("   - Overdue items found: " + overdueFound);
         System.out.println("   - Notifications sent: " + overdueFound);
 
         if (overdueFound > 0) {
-            System.out.println("✅ Overdue processing completed");
+            System.out.println(" Overdue processing completed");
         } else {
-            System.out.println("✅ No overdue items found");
+            System.out.println(" No overdue items found");
         }
     }
 
@@ -120,7 +120,7 @@ public class OverdueService {
                 markFineApplied(loan);
             }
 
-            System.out.println("⚠️ Overdue detected: " + loan.getBook().getTitle());
+            System.out.println(" Overdue detected: " + loan.getBook().getTitle());
             System.out.println("   - User: " + user.getName());
             System.out.println("   - Overdue days: " + overdueDays);
             System.out.println("   - Fine: " + fineAmount + " NIS");
@@ -130,7 +130,7 @@ public class OverdueService {
             sendOverdueNotification(user, loan);
 
         } catch (Exception e) {
-            System.out.println("❌ Error processing overdue loan: " + e.getMessage());
+            System.out.println(" Error processing overdue loan: " + e.getMessage());
         }
     }
 
@@ -148,10 +148,10 @@ public class OverdueService {
             );
 
             notifier.notify(user, message);
-            System.out.println("📧 Notification sent to: " + user.getEmail());
+            System.out.println(" Notification sent to: " + user.getEmail());
 
         } catch (Exception e) {
-            System.out.println("❌ Error sending notification: " + e.getMessage());
+            System.out.println(" Error sending notification: " + e.getMessage());
         }
     }
 
@@ -240,20 +240,20 @@ public class OverdueService {
      * Emergency manual scan with detailed report
      */
     public void performEmergencyScan() {
-        System.out.println("🚨 EMERGENCY OVERDUE SCAN INITIATED");
+        System.out.println(" EMERGENCY OVERDUE SCAN INITIATED");
         System.out.println("=====================================");
 
         List<Loan> allLoans = loanRepository.findActiveLoans();
         List<Loan> overdueLoans = getOverdueLoans();
 
-        System.out.println("📊 SYSTEM OVERDUE REPORT:");
+        System.out.println(" SYSTEM OVERDUE REPORT:");
         System.out.println("   - Total active loans: " + allLoans.size());
         System.out.println("   - Overdue loans: " + overdueLoans.size());
         System.out.println("   - Overdue rate: " +
                 (allLoans.isEmpty() ? 0 : (overdueLoans.size() * 100 / allLoans.size())) + "%");
 
         if (!overdueLoans.isEmpty()) {
-            System.out.println("\n📋 OVERDUE ITEMS DETAILS:");
+            System.out.println("\n OVERDUE ITEMS DETAILS:");
             for (int i = 0; i < overdueLoans.size(); i++) {
                 Loan loan = overdueLoans.get(i);
                 System.out.println((i + 1) + ". " + loan.getBook().getTitle());
@@ -265,7 +265,7 @@ public class OverdueService {
         }
 
         System.out.println("=====================================");
-        System.out.println("🚨 EMERGENCY SCAN COMPLETED");
+        System.out.println("EMERGENCY SCAN COMPLETED");
     }
 
     /**

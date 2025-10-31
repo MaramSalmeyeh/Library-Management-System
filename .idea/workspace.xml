@@ -4,29 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="Sprint1 Done.">
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/app/AuthServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/app/BorrowingServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/app/CatalogServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/BorrowingDomainServiceTest.java" afterDir="false" />
+    <list default="true" id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="Sprint2">
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/strategies/BookFineStrategyTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/infrastructure/notification/EmailNotifierTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/integration/LibrarySystemIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/app/AuthService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/BorrowingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/app/BorrowingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/LibrarySystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/app/LibrarySystemApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/CatalogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/app/CatalogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/LibrarySystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/presentation/controllers/LibrarySystemApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/application/service/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/application/service/AdminService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Loan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Loan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/repository/BookRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/repository/BookRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/service/BorrowingDomainService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/service/BorrowingDomainService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/service/OverdueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/service/OverdueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/EmailNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/EmailNotifier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/NotificationLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/NotificationLogger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/presentation/ui/LibrarySystemUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/presentation/ui/LibrarySystemUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/app/BorrowingService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/OverdueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/OverdueServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/model/AdminTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/model/AdminTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/model/BookTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/model/BookTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/model/LoanTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/model/LoanTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/model/UserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/model/UserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/app/BorrowingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/app/BorrowingServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/app/CatalogServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/app/CatalogServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/BorrowingDomainServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/service/BorrowingDomainServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/OverdueServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/service/OverdueServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,12 +54,12 @@
     &quot;assignee&quot;: &quot;aseelqusy&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/MaramSalmeyeh/Library-Management-System-.git",
-    "accountId": "407327f5-011d-4c5b-8081-918c06a96ab7"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MaramSalmeyeh/Library-Management-System-.git&quot;,
+    &quot;accountId&quot;: &quot;407327f5-011d-4c5b-8081-918c06a96ab7&quot;
   }
-}]]></component>
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -73,37 +72,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.ConsoleUI.executor&quot;: &quot;Run&quot;,
-    &quot;Application.LibrarySystemApp.executor&quot;: &quot;Run&quot;,
-    &quot;Application.LibrarySystemUI.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AdminTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in library-sys (1).executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in library-sys.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BookTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LibrarianTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UserTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.java in library-sys.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;maramSprint2&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Documents/Desktop/Lib-sys-pro&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.7468355&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ConsoleUI.executor": "Run",
+    "Application.LibrarySystemApp.executor": "Run",
+    "Application.LibrarySystemUI.executor": "Run",
+    "JUnit.AdminTest.executor": "Run",
+    "JUnit.All in library-sys (1).executor": "Run",
+    "JUnit.All in library-sys.executor": "Run",
+    "JUnit.BookTest.executor": "Run",
+    "JUnit.BorrowingServiceTest.testBorrowBookSuccess.executor": "Coverage",
+    "JUnit.LibrarianTest.executor": "Run",
+    "JUnit.OverdueServiceTest.executor": "Run",
+    "JUnit.UserTest.executor": "Run",
+    "JUnit.java in library-sys.executor": "Coverage",
+    "Maven.library-sys [clean].executor": "Run",
+    "Maven.library-sys [test].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "maramSprint2",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Documents/Desktop/Lib-sys-pro",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.7468355",
+    "settings.editor.selected.configurable": "advanced.settings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DELL\Desktop\ف1 سنة 4\software\Lib-sys-pro\src\main\java\com\library\domain" />
@@ -116,39 +120,15 @@
       <recent name="Library" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.java in library-sys">
-    <configuration name="ConsoleUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.library.presentation.ConsoleUI" />
-      <module name="library-sys" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.library.presentation.ui.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Application.LibrarySystemApp">
     <configuration name="LibrarySystemApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.library.app.LibrarySystemApp" />
+      <option name="ALTERNATIVE_JRE_PATH" value="$PROJECT_DIR$/../jdk-21.0.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.library.presentation.controllers.LibrarySystemApp" />
       <module name="library-sys" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.library.app.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="LibrarySystemUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.library.presentation.ui.LibrarySystemUI" />
-      <module name="library-sys" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.library.presentation.ui.*" />
+          <option name="PATTERN" value="com.library.presentation.controllers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -164,8 +144,41 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="BorrowingServiceTest.testBorrowBookSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="library-sys" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.library.presentation.controllers.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.library.app" />
+      <option name="MAIN_CLASS_NAME" value="com.library.app.BorrowingServiceTest" />
+      <option name="METHOD_NAME" value="testBorrowBookSuccess" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OverdueServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="library-sys" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.library.domain.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.library.domain.service" />
+      <option name="MAIN_CLASS_NAME" value="com.library.domain.service.OverdueServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="java in library-sys" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="library-sys" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="directory" />
       <dir value="$PROJECT_DIR$/src/test/java" />
       <method v="2">
@@ -242,21 +255,21 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.ConsoleUI" />
       <item itemvalue="Application.LibrarySystemApp" />
-      <item itemvalue="Application.LibrarySystemUI" />
-      <item itemvalue="JUnit.java in library-sys" />
       <item itemvalue="JUnit.All in library-sys (1)" />
-      <item itemvalue="Maven.library-sys" />
+      <item itemvalue="JUnit.BorrowingServiceTest.testBorrowBookSuccess" />
+      <item itemvalue="JUnit.OverdueServiceTest" />
+      <item itemvalue="JUnit.java in library-sys" />
       <item itemvalue="Maven.Run Tests with Coverage" />
+      <item itemvalue="Maven.library-sys" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.java in library-sys" />
         <item itemvalue="Application.LibrarySystemApp" />
-        <item itemvalue="Application.LibrarySystemUI" />
+        <item itemvalue="JUnit.OverdueServiceTest" />
+        <item itemvalue="JUnit.java in library-sys" />
+        <item itemvalue="JUnit.BorrowingServiceTest.testBorrowBookSuccess" />
         <item itemvalue="JUnit.All in library-sys (1)" />
-        <item itemvalue="Application.ConsoleUI" />
       </list>
     </recent_temporary>
   </component>
@@ -291,7 +304,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761855453412</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Sprint2">
+      <option name="closed" value="true" />
+      <created>1761864416715</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761864416715</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -322,7 +343,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Sprint1 Done." />
-    <option name="LAST_COMMIT_MESSAGE" value="Sprint1 Done." />
+    <MESSAGE value="Sprint2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sprint2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -336,6 +358,10 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Lib_sys_pro$java_in_library_sys.ic" NAME="java in library-sys Coverage Results" MODIFIED="1761907523688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/Lib_sys_pro$BorrowingServiceTest_testBorrowBookSuccess.ic" NAME="BorrowingServiceTest.testBorrowBookSuccess Coverage Results" MODIFIED="1761907497951" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.library.app.*</FILTER>
+    </SUITE>
     <SUITE FILE_PATH="coverage/Lib_sys_pro$All_in_library_sys__1_.ic" NAME="All in library-sys (1) Coverage Results" MODIFIED="1761842768104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

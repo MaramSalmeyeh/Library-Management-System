@@ -5,17 +5,17 @@ public class AuthService {
 
     // غير كلمة المرور هنا
     private final String USERNAME = "admin";
-    private final String PASSWORD = "password123";  // ✅ تأكد إنه هاد بالضبط
+    private final String PASSWORD = "password123";
 
     public boolean login(String username, String password) {
         System.out.println("Debug: Username='" + username + "', Password='" + password + "'");
 
         if (USERNAME.equals(username) && PASSWORD.equals(password)) {
             loggedIn = true;
-            System.out.println("✅ Login successful!");
+            System.out.println(" Login successful!");
             return true;
         } else {
-            System.out.println("❌ Login failed! Expected: '" + PASSWORD + "'");
+            System.out.println(" Login failed! Expected: '" + PASSWORD + "'");
             return false;
         }
     }

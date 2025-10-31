@@ -141,28 +141,22 @@ public class CatalogService {
         return getAllBooks().size();
     }
 
-    /**
-     * Check if a book is available for borrowing
-     * @param isbn book ISBN
-     * @return true if book exists and is available
-     */
+
     public boolean isBookAvailable(String isbn) {
         Book book = findBookByIsbn(isbn);
         return book != null && book.isAvailable();
     }
 
-    /**
-     * Display all books with their availability status
-     */
+
     public void displayAllBooks() {
         List<Book> books = getAllBooks();
         if (books.isEmpty()) {
-            System.out.println("📚 No books in catalog.");
+            System.out.println(" No books in catalog.");
         } else {
-            System.out.println("📚 All Books (" + books.size() + " total):");
+            System.out.println(" All Books (" + books.size() + " total):");
             for (int i = 0; i < books.size(); i++) {
                 Book book = books.get(i);
-                String status = book.isAvailable() ? "✅ Available" : "❌ Borrowed";
+                String status = book.isAvailable() ? " Available" : " Borrowed";
                 System.out.println((i + 1) + ". " + book.getTitle() + " by " + book.getAuthor() +
                         " (ISBN: " + book.getIsbn() + ") - " + status);
             }

@@ -1,9 +1,6 @@
 package com.library.application.service;
 
-/**
- * Minimal Admin service for Sprint 1 demo.
- * Provides a hard-coded admin credential and simple login/logout state.
- */
+
 public class AdminService {
     private static final String DEFAULT_USERNAME = "admin";
     private static final String DEFAULT_PASSWORD = "1234";

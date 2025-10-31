@@ -14,7 +14,7 @@ public class NotificationLogger {
     public static void logEmail(String email, String message) {
         String logEntry = "Email to: " + email + " - Message: " + message;
         sentNotifications.add(logEntry);
-        System.out.println("📋 Notification logged: " + logEntry);
+        System.out.println(" Notification logged: " + logEntry);
     }
 
     public static List<String> getSentNotifications() {
@@ -33,7 +33,7 @@ public class NotificationLogger {
         if (sentNotifications.isEmpty()) {
             System.out.println("No notifications sent yet.");
         } else {
-            System.out.println("📨 Sent Notifications:");
+            System.out.println(" Sent Notifications:");
             for (int i = 0; i < sentNotifications.size(); i++) {
                 System.out.println((i + 1) + ". " + sentNotifications.get(i));
             }
