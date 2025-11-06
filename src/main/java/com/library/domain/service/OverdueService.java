@@ -3,30 +3,55 @@ package com.library.domain.service;
 import com.library.domain.model.Loan;
 import com.library.domain.model.User;
 import com.library.infrastructure.notification.Observer;
+import com.library.infrastructure.mock.NotificationException;
 import com.library.repository.LoanRepository;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * Service for automatic overdue detection and processing (US2.2)
+ * Service for automatic overdue detection and processing (US2.2) and notifications (US3.1)
+ * Handles overdue loan detection, fine application, and user notifications
+ *
  * @author Your Name
- * @version 1.0
+ * @version 2.0
  */
 public class OverdueService {
     private final LoanRepository loanRepository;
     private final Observer notifier;
     private final ScheduledExecutorService scheduler;
     private boolean isScannerRunning = false;
+    private final Map<String, LocalDate> lastFineApplication; // Track fine application dates
+
+    // Configuration constants
+    private static final int SCANNER_THREAD_POOL_SIZE = 1;
+    private static final long SCAN_INTERVAL_HOURS = 24;
+    private static final int TARGET_SCAN_HOUR = 8; // 8:00 AM
 
     public OverdueService(LoanRepository loanRepository, Observer notifier) {
-        this.loanRepository = loanRepository;
-        this.notifier = notifier;
-        this.scheduler = Executors.newScheduledThreadPool(1);
+        this.loanRepository = Objects.requireNonNull(loanRepository, "LoanRepository cannot be null");
+        this.notifier = Objects.requireNonNull(notifier, "Observer cannot be null");
+        this.scheduler = Executors.newScheduledThreadPool(SCANNER_THREAD_POOL_SIZE);
+        this.lastFineApplication = new HashMap<>();
+
+        initializeNotifier();
+    }
+
+    /**
+     * Initialize the notification observer
+     */
+    private void initializeNotifier() {
+        try {
+            notifier.initialize();
+            System.out.println("✅ Notifier initialized: " + notifier.getType());
+        } catch (Exception e) {
+            System.out.println("⚠️  Failed to initialize notifier: " + e.getMessage());
+        }
     }
 
     /**
@@ -34,29 +59,40 @@ public class OverdueService {
      */
     public void startAutomaticOverdueScanning() {
         if (isScannerRunning) {
-            System.out.println("⚠ Overdue scanner is already running");
+            System.out.println("⚠️ Overdue scanner is already running");
             return;
         }
 
-        System.out.println(" Starting automatic overdue scanner...");
+        if (!notifier.isActive()) {
+            System.out.println("❌ Cannot start scanner - notifier is not active");
+            return;
+        }
+
+        System.out.println("🚀 Starting automatic overdue scanner...");
         isScannerRunning = true;
 
-
         long initialDelay = calculateInitialDelay();
-        long period = TimeUnit.DAYS.toMillis(1); // 24 hours
+        long period = TimeUnit.HOURS.toMillis(SCAN_INTERVAL_HOURS);
 
-        scheduler.scheduleAtFixedRate(() -> {
-            try {
-                System.out.println(" Scheduled overdue scan started at: " + LocalDate.now());
-                checkAndProcessOverdueItems();
-                System.out.println(" Scheduled overdue scan completed");
-            } catch (Exception e) {
-                System.out.println(" Error in scheduled overdue scan: " + e.getMessage());
-            }
-        }, initialDelay, period, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::scheduledScan, initialDelay, period, TimeUnit.MILLISECONDS);
 
-        System.out.println(" Automatic overdue scanner started successfully");
-        System.out.println(" Next scan in: " + (initialDelay / (1000 * 60 * 60)) + " hours");
+        System.out.println("✅ Automatic overdue scanner started successfully");
+        System.out.println("📅 Next scan in: " + (initialDelay / (1000 * 60 * 60)) + " hours");
+        System.out.println("🔔 Notifier type: " + notifier.getType());
+    }
+
+    /**
+     * Scheduled scan method with proper error handling
+     */
+    private void scheduledScan() {
+        try {
+            System.out.println("🕐 Scheduled overdue scan started at: " + LocalDateTime.now());
+            checkAndProcessOverdueItems();
+            System.out.println("✅ Scheduled overdue scan completed");
+        } catch (Exception e) {
+            System.out.println("❌ Error in scheduled overdue scan: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -64,44 +100,65 @@ public class OverdueService {
      */
     public void stopAutomaticOverdueScanning() {
         if (!isScannerRunning) {
-            System.out.println(" Overdue scanner is not running");
+            System.out.println("⚠️ Overdue scanner is not running");
             return;
         }
 
-        System.out.println(" Stopping automatic overdue scanner...");
+        System.out.println("🛑 Stopping automatic overdue scanner...");
         scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
         isScannerRunning = false;
-        System.out.println(" Automatic overdue scanner stopped");
+        System.out.println("✅ Automatic overdue scanner stopped");
     }
 
     /**
      * Manual trigger for overdue detection (US2.2)
      */
     public void checkAndProcessOverdueItems() {
-        System.out.println(" Scanning for overdue items...");
+        System.out.println("🔍 Scanning for overdue items...");
 
         List<Loan> activeLoans = loanRepository.findActiveLoans();
         int totalProcessed = 0;
         int overdueFound = 0;
+        int notificationsSent = 0;
 
         for (Loan loan : activeLoans) {
-            if (loan.isOverdue()) {
-                processOverdueLoan(loan);
+            try {
+                if (loan.isOverdue()) {
+                    processOverdueLoan(loan);
+                    overdueFound++;
+                    notificationsSent++;
+                }
                 totalProcessed++;
-                overdueFound++;
+            } catch (Exception e) {
+                System.out.println("❌ Error processing loan " + loan.getId() + ": " + e.getMessage());
             }
-            totalProcessed++;
         }
 
-        System.out.println(" Scan results:");
-        System.out.println("   - Total loans checked: " + totalProcessed);
-        System.out.println("   - Overdue items found: " + overdueFound);
-        System.out.println("   - Notifications sent: " + overdueFound);
+        printScanResults(totalProcessed, overdueFound, notificationsSent);
+    }
+
+    /**
+     * Print detailed scan results
+     */
+    private void printScanResults(int totalProcessed, int overdueFound, int notificationsSent) {
+        System.out.println("📊 Scan Results:");
+        System.out.println("   📋 Total loans checked: " + totalProcessed);
+        System.out.println("   ⚠️  Overdue items found: " + overdueFound);
+        System.out.println("   📧 Notifications sent: " + notificationsSent);
+        System.out.println("   💰 Fines applied: " + overdueFound);
 
         if (overdueFound > 0) {
-            System.out.println(" Overdue processing completed");
+            System.out.println("✅ Overdue processing completed");
         } else {
-            System.out.println(" No overdue items found");
+            System.out.println("✅ No overdue items found");
         }
     }
 
@@ -114,24 +171,37 @@ public class OverdueService {
             int overdueDays = loan.getOverdueDays();
             double fineAmount = loan.calculateFine();
 
+            // Validate loan and user
+            if (user == null) {
+                throw new IllegalStateException("Loan has no associated user");
+            }
+
             // Apply fine to user (only if not already applied today)
             if (!isFineAppliedToday(loan)) {
                 user.addFine(fineAmount);
                 markFineApplied(loan);
             }
 
-            System.out.println(" Overdue detected: " + loan.getBook().getTitle());
-            System.out.println("   - User: " + user.getName());
-            System.out.println("   - Overdue days: " + overdueDays);
-            System.out.println("   - Fine: " + fineAmount + " NIS");
-            System.out.println("   - Total user fines: " + user.getFineBalance() + " NIS");
+            logOverdueDetection(loan, user, overdueDays, fineAmount);
 
             // Send notification (US3.1)
             sendOverdueNotification(user, loan);
 
         } catch (Exception e) {
-            System.out.println(" Error processing overdue loan: " + e.getMessage());
+            System.out.println("❌ Error processing overdue loan " + loan.getId() + ": " + e.getMessage());
+            throw e;
         }
+    }
+
+    /**
+     * Log overdue detection details
+     */
+    private void logOverdueDetection(Loan loan, User user, int overdueDays, double fineAmount) {
+        System.out.println("⚠️  Overdue detected: " + loan.getBook().getTitle());
+        System.out.println("   👤 User: " + user.getName());
+        System.out.println("   📅 Overdue days: " + overdueDays);
+        System.out.println("   💰 Fine: " + fineAmount + " NIS");
+        System.out.println("   🏦 Total user fines: " + user.getFineBalance() + " NIS");
     }
 
     /**
@@ -139,58 +209,75 @@ public class OverdueService {
      */
     private void sendOverdueNotification(User user, Loan loan) {
         try {
-            String message = String.format(
-                    "OVERDUE NOTICE: Book '%s' is %d days overdue. " +
-                            "Fine accrued: %.2f NIS. Please return it immediately to avoid additional charges.",
-                    loan.getBook().getTitle(),
-                    loan.getOverdueDays(),
-                    loan.calculateFine()
-            );
+            String message = buildNotificationMessage(loan);
+
+            // Validate before sending
+            if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+                System.out.println("⚠️  Cannot send notification - user has no email: " + user.getName());
+                return;
+            }
 
             notifier.notify(user, message);
-            System.out.println(" Notification sent to: " + user.getEmail());
+            System.out.println("📧 Notification sent to: " + user.getEmail());
 
+        } catch (NotificationException e) {
+            System.out.println("❌ Notification failed for user " + user.getName() + ": " + e.getMessage());
         } catch (Exception e) {
-            System.out.println(" Error sending notification: " + e.getMessage());
+            System.out.println("❌ Unexpected error sending notification: " + e.getMessage());
         }
+    }
+
+    /**
+     * Build notification message for overdue loan
+     */
+    private String buildNotificationMessage(Loan loan) {
+        return String.format(
+                "OVERDUE NOTICE: Book '%s' is %d days overdue. " +
+                        "Fine accrued: %.2f NIS. Please return it immediately to avoid additional charges.",
+                loan.getBook().getTitle(),
+                loan.getOverdueDays(),
+                loan.calculateFine()
+        );
     }
 
     /**
      * Check if fine was already applied today (prevent duplicate fines)
      */
     private boolean isFineAppliedToday(Loan loan) {
-        // Simple implementation - in real system, you'd track application dates
-        // For now, we'll assume fines are applied daily for overdue items
-        return false;
+        String loanKey = loan.getId();
+        LocalDate lastApplied = lastFineApplication.get(loanKey);
+        return lastApplied != null && lastApplied.equals(LocalDate.now());
     }
 
     /**
-     * Mark fine as applied (placeholder for more complex tracking)
+     * Mark fine as applied with today's date
      */
     private void markFineApplied(Loan loan) {
-        // In real system, you'd store the last fine application date
+        lastFineApplication.put(loan.getId(), LocalDate.now());
     }
 
     /**
-     * Calculate initial delay for scheduler (until next 8:00 AM)
+     * Calculate initial delay for scheduler (until next target time)
      */
     private long calculateInitialDelay() {
-        LocalDate now = LocalDate.now();
-        LocalDate tomorrow = now.plusDays(1);
-
-        // Target time: 8:00 AM
-        long targetTime = TimeUnit.HOURS.toMillis(8);
-
-        // Calculate delay until next 8:00 AM
         long currentTime = System.currentTimeMillis();
-        long nextScanTime = currentTime + targetTime;
+        Calendar calendar = Calendar.getInstance();
 
-        // If it's past 8:00 AM today, schedule for tomorrow
+        // Set target time (8:00 AM)
+        calendar.set(Calendar.HOUR_OF_DAY, TARGET_SCAN_HOUR);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        long targetTime = calendar.getTimeInMillis();
+
+        // If it's past target time today, schedule for tomorrow
         if (currentTime > targetTime) {
-            nextScanTime += TimeUnit.DAYS.toMillis(1);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            targetTime = calendar.getTimeInMillis();
         }
 
-        return nextScanTime - currentTime;
+        return targetTime - currentTime;
     }
 
     /**
@@ -206,6 +293,9 @@ public class OverdueService {
      * Get overdue loans for specific user
      */
     public List<Loan> getOverdueLoansForUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         return user.getActiveLoans().stream()
                 .filter(Loan::isOverdue)
                 .collect(Collectors.toList());
@@ -215,6 +305,9 @@ public class OverdueService {
      * Check if user has any overdue items
      */
     public boolean hasOverdueItems(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         return user.getActiveLoans().stream()
                 .anyMatch(Loan::isOverdue);
     }
@@ -223,6 +316,9 @@ public class OverdueService {
      * Get total overdue fines for user
      */
     public double calculateOverdueFines(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         return user.getActiveLoans().stream()
                 .filter(Loan::isOverdue)
                 .mapToDouble(Loan::calculateFine)
@@ -237,35 +333,52 @@ public class OverdueService {
     }
 
     /**
+     * Get notifier type
+     */
+    public String getNotifierType() {
+        return notifier.getType();
+    }
+
+    /**
      * Emergency manual scan with detailed report
      */
     public void performEmergencyScan() {
-        System.out.println(" EMERGENCY OVERDUE SCAN INITIATED");
-        System.out.println("=====================================");
+        System.out.println("🚨 EMERGENCY OVERDUE SCAN INITIATED");
+        System.out.println("===========================================");
 
         List<Loan> allLoans = loanRepository.findActiveLoans();
         List<Loan> overdueLoans = getOverdueLoans();
 
-        System.out.println(" SYSTEM OVERDUE REPORT:");
-        System.out.println("   - Total active loans: " + allLoans.size());
-        System.out.println("   - Overdue loans: " + overdueLoans.size());
-        System.out.println("   - Overdue rate: " +
+        System.out.println("📈 SYSTEM OVERDUE REPORT:");
+        System.out.println("   📚 Total active loans: " + allLoans.size());
+        System.out.println("   ⚠️  Overdue loans: " + overdueLoans.size());
+        System.out.println("   📊 Overdue rate: " +
                 (allLoans.isEmpty() ? 0 : (overdueLoans.size() * 100 / allLoans.size())) + "%");
+        System.out.println("   🔔 Notifier: " + notifier.getType() + " (" +
+                (notifier.isActive() ? "ACTIVE" : "INACTIVE") + ")");
 
         if (!overdueLoans.isEmpty()) {
-            System.out.println("\n OVERDUE ITEMS DETAILS:");
-            for (int i = 0; i < overdueLoans.size(); i++) {
-                Loan loan = overdueLoans.get(i);
-                System.out.println((i + 1) + ". " + loan.getBook().getTitle());
-                System.out.println("   - User: " + loan.getUser().getName());
-                System.out.println("   - Due date: " + loan.getDueDate());
-                System.out.println("   - Overdue days: " + loan.getOverdueDays());
-                System.out.println("   - Current fine: " + loan.calculateFine() + " NIS");
-            }
+            printOverdueDetails(overdueLoans);
         }
 
-        System.out.println("=====================================");
-        System.out.println("EMERGENCY SCAN COMPLETED");
+        System.out.println("===========================================");
+        System.out.println("✅ EMERGENCY SCAN COMPLETED");
+    }
+
+    /**
+     * Print detailed overdue items information
+     */
+    private void printOverdueDetails(List<Loan> overdueLoans) {
+        System.out.println("\n📋 OVERDUE ITEMS DETAILS:");
+        for (int i = 0; i < overdueLoans.size(); i++) {
+            Loan loan = overdueLoans.get(i);
+            System.out.println((i + 1) + ". " + loan.getBook().getTitle());
+            System.out.println("   👤 User: " + loan.getUser().getName());
+            System.out.println("   📅 Due date: " + loan.getDueDate());
+            System.out.println("   📅 Overdue days: " + loan.getOverdueDays());
+            System.out.println("   💰 Current fine: " + loan.calculateFine() + " NIS");
+            System.out.println("   📧 User email: " + loan.getUser().getEmail());
+        }
     }
 
     /**
@@ -273,5 +386,24 @@ public class OverdueService {
      */
     public void shutdown() {
         stopAutomaticOverdueScanning();
+        try {
+            notifier.shutdown();
+            System.out.println("✅ Notifier shutdown completed");
+        } catch (Exception e) {
+            System.out.println("⚠️  Error during notifier shutdown: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Get fine application statistics for monitoring
+     */
+    public Map<String, Object> getStatistics() {
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("scannerRunning", isScannerRunning);
+        stats.put("notifierType", notifier.getType());
+        stats.put("notifierActive", notifier.isActive());
+        stats.put("trackedLoans", lastFineApplication.size());
+        stats.put("lastScan", LocalDateTime.now().toString());
+        return stats;
     }
 }

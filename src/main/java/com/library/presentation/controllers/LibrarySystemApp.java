@@ -5,85 +5,125 @@ import com.library.app.BorrowingService;
 import com.library.app.CatalogService;
 import com.library.domain.service.BorrowingDomainService;
 import com.library.domain.service.OverdueService;
-import com.library.infrastructure.notification.EmailNotifier;
+import com.library.domain.service.ReminderService;
+import com.library.domain.model.EmailNotifier;
 import com.library.presentation.ui.LibrarySystemUI;
 import com.library.repository.BookRepository;
 import com.library.repository.LoanRepository;
 
-
+/**
+ * Main application entry point for Library Management System
+ * Initializes all services and starts the user interface
+ *
+ * Sprint 1: Admin & Book Management
+ * Sprint 2: Borrowing & Overdue Logic
+ * Sprint 3: Communication & Mocking (Notifications)
+ *
+ * @author Your Name
+ * @version 3.0
+ */
 public class LibrarySystemApp {
 
-
     public static void main(String[] args) {
-        System.out.println("Starting Library Management System...");
+        System.out.println("=".repeat(50));
+        System.out.println("🚀 Starting Library Management System...");
+        System.out.println("=".repeat(50));
 
         try {
-            // 1. Initialize repositories
+            // ===== 1. Initialize Repositories =====
+            System.out.println("\n📦 Initializing repositories...");
             BookRepository bookRepository = new BookRepository();
             LoanRepository loanRepository = new LoanRepository();
+            System.out.println("✅ Repositories initialized");
 
-            // 2. Initialize services
+            // ===== 2. Initialize Core Services =====
+            System.out.println("\n⚙️  Initializing core services...");
             AuthService authService = new AuthService();
             CatalogService catalogService = new CatalogService(bookRepository, authService);
-
             BorrowingDomainService borrowingDomainService = new BorrowingDomainService(loanRepository);
             BorrowingService borrowingService = new BorrowingService(borrowingDomainService);
+            System.out.println("✅ Core services initialized");
 
-            // 3. Initialize Overdue Service with Email Notifier (Sprint 2 + 3)
+            // ===== 3. Initialize Notification System (Sprint 3) =====
+            System.out.println("\n📧 Initializing notification system (Sprint 3)...");
             EmailNotifier emailNotifier = new EmailNotifier();
-            OverdueService overdueService = new OverdueService(loanRepository, emailNotifier);
+            System.out.println("✅ Email notifier initialized: " + emailNotifier.getNotifierId());
 
-            // 4. Add sample books for testing
-            System.out.println("Loading sample books...");
+            // ===== 4. Initialize Overdue Service (Sprint 2 + 3) =====
+            System.out.println("\n⏰ Initializing overdue detection service...");
+            OverdueService overdueService = new OverdueService(loanRepository, emailNotifier);
+            System.out.println("✅ Overdue service initialized");
+
+            // ===== 5. Initialize Reminder Service (Sprint 3 - NEW) =====
+            System.out.println("\n📬 Initializing reminder service (Sprint 3)...");
+            ReminderService reminderService = new ReminderService(loanRepository);
+            reminderService.addObserver(emailNotifier); // Add email notifier as observer
+            System.out.println("✅ Reminder service initialized");
+            System.out.println("   📡 Active observers: " + reminderService.getActiveObserverCount());
+
+            // ===== 6. Load Sample Books =====
+            System.out.println("\n📚 Loading sample books...");
             addSampleBooks(bookRepository);
 
-            // 5. Initialize UI
-            LibrarySystemUI ui = new LibrarySystemUI(authService, catalogService, borrowingService, overdueService);
+            // ===== 7. Initialize User Interface =====
+            System.out.println("\n🖥️  Initializing user interface...");
+            LibrarySystemUI ui = new LibrarySystemUI(
+                    authService,
+                    catalogService,
+                    borrowingService,
+                    overdueService,
+                    reminderService  // Pass reminder service to UI
+            );
+            System.out.println("✅ User interface initialized");
 
-            // 6. Start automatic overdue detection system
-            System.out.println("Initializing overdue detection system...");
+            // ===== 8. Start Automatic Overdue Detection =====
+            System.out.println("\n🔄 Starting automatic overdue detection...");
             overdueService.startAutomaticOverdueScanning();
+            System.out.println("✅ Automatic overdue scanning started");
 
-            // 7.Add shutdown hook for graceful shutdown
+            // ===== 9. Setup Shutdown Hook =====
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                System.out.println("Shutting down library system...");
-                overdueService.shutdown();
-                System.out.println("Library system shutdown completed");
+                System.out.println("\n🛑 Shutting down library system...");
+                try {
+                    overdueService.shutdown();
+                    System.out.println("✅ Overdue service stopped");
+                    System.out.println("✅ Library system shutdown completed");
+                } catch (Exception e) {
+                    System.out.println("⚠️  Error during shutdown: " + e.getMessage());
+                }
             }));
 
-            // 8.Display startup information and start application
-            System.out.println("System initialized successfully!");
-            System.out.println("System Overview:");
-            System.out.println("   - Books in catalog: " + catalogService.getBookCount());
-            System.out.println("   - Overdue scanner: " + (overdueService.isScannerRunning() ? "RUNNING" : "STOPPED"));
-            System.out.println("   - Notification service: READY");
-            System.out.println("   - Borrowing service: READY");
-            System.out.println("Login credentials: admin / password123");
-            System.out.println("==========================================");
+            // ===== 10. Display System Overview =====
+            displaySystemOverview(catalogService, overdueService, reminderService);
 
-            // 9.  Start the user interface
+            // ===== 11. Start Application =====
+            System.out.println("🎯 Starting user interface...\n");
             ui.start();
 
         } catch (Exception e) {
-            System.out.println("Error starting application: " + e.getMessage());
+            System.out.println("\n❌ ERROR: Failed to start application");
+            System.out.println("   Reason: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-
+    /**
+     * Add sample books to the repository for testing
+     */
     private static void addSampleBooks(BookRepository bookRepository) {
         try {
-
             String[][] sampleBooks = {
-                    {"001", "Java Programming", "John Doe"},
-                    {"002", "Design Patterns", "Jane Smith"},
-                    {"003", "Clean Code", "Robert Martin"},
-                    {"004", "Effective Java", "Joshua Bloch"},
-                    {"005", "Head First Java", "Kathy Sierra"},
-                    {"006", "The Great Gatsby", "F. Scott Fitzgerald"},
-                    {"007", "Spring in Action", "Craig Walls"},
-                    {"008", "Test Driven Development", "Kent Beck"}
+                    {"1", "Effective Java", "Joshua Bloch"},
+                    {"2", "Head First Design Patterns", "Eric Freeman"},
+                    {"3", "Clean Code", "Robert C. Martin"},
+                    {"4", "Design Patterns", "Gang of Four"},
+                    {"5", "The Clean Coder", "Robert C. Martin"},
+                    {"6", "Effective C++", "Scott Meyers"},
+                    {"7", "Head First Java", "Kathy Sierra"},
+                    {"8", "Spring in Action", "Craig Walls"},
+                    {"9", "Growing Object-Oriented Software", "Steve Freeman"},
+                    {"10", "Java Concurrency in Practice", "Brian Goetz"}
             };
 
             int addedCount = 0;
@@ -97,49 +137,71 @@ public class LibrarySystemApp {
                     bookRepository.save(book);
                     addedCount++;
                 } catch (Exception e) {
-                    System.out.println(" Could not add book: " + bookData[1] + " - " + e.getMessage());
+                    System.out.println("⚠️  Could not add book: " + bookData[1]);
                 }
             }
 
-            System.out.println( addedCount + " sample books loaded successfully");
+            System.out.println("✅ " + addedCount + " sample books loaded successfully");
 
         } catch (Exception e) {
-            System.out.println(" Error loading sample books: " + e.getMessage());
+            System.out.println("❌ Error loading sample books: " + e.getMessage());
         }
     }
 
+    /**
+     * Display comprehensive system overview
+     */
+    private static void displaySystemOverview(CatalogService catalogService,
+                                              OverdueService overdueService,
+                                              ReminderService reminderService) {
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("📊 SYSTEM OVERVIEW");
+        System.out.println("=".repeat(50));
 
-    private static void addSampleBooksWithAdmin(CatalogService catalogService, AuthService authService) {
-        try {
-            // Login as admin first
-            if (authService.login("admin", "password123")) {
-                System.out.println(" Admin logged in for sample data...");
+        // Catalog Information
+        System.out.println("\n📚 CATALOG:");
+        System.out.println("   • Books in catalog: " + catalogService.getBookCount());
+        System.out.println("   • Status: READY");
 
-                // Add books using CatalogService (requires admin)
-                catalogService.addBook("100", "Advanced Java", "Expert Author");
-                catalogService.addBook("101", "Database Design", "DB Expert");
+        // Overdue Detection System
+        System.out.println("\n⏰ OVERDUE DETECTION (Sprint 2):");
+        System.out.println("   • Scanner status: " +
+                (overdueService.isScannerRunning() ? "✅ RUNNING" : "⚠️  STOPPED"));
+        System.out.println("   • Notifier type: " + overdueService.getNotifierType());
 
-                System.out.println(" Sample books added with admin privileges");
+        // Notification System (Sprint 3)
+        System.out.println("\n📬 REMINDER SYSTEM (Sprint 3):");
+        System.out.println("   • Active observers: " + reminderService.getActiveObserverCount());
+        System.out.println("   • Service status: ✅ READY");
+        System.out.println("   • Message format: \"You have n overdue book(s).\"");
 
-                // Logout after adding
-                authService.logout();
-            } else {
-                System.out.println(" Could not login as admin for sample data");
-            }
-        } catch (Exception e) {
-            System.out.println(" Could not add books with admin: " + e.getMessage());
-        }
+        // Borrowing System
+        System.out.println("\n📖 BORROWING SYSTEM:");
+        System.out.println("   • Loan period: 28 days");
+        System.out.println("   • Fine rate: 10 NIS/day (books)");
+        System.out.println("   • Status: ✅ READY");
+
+        // Authentication
+        System.out.println("\n🔐 AUTHENTICATION:");
+        System.out.println("   • Default admin: admin / password123");
+        System.out.println("   • Status: ✅ READY");
+
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("✅ ALL SYSTEMS OPERATIONAL");
+        System.out.println("=".repeat(50) + "\n");
     }
 
-
-    private static void displaySystemStats(BookRepository bookRepository, LoanRepository loanRepository) {
+    /**
+     * Display system statistics (utility method)
+     */
+    private static void displaySystemStats(BookRepository bookRepository,
+                                           LoanRepository loanRepository) {
         try {
-            System.out.println(" System Statistics:");
-            System.out.println("   - Total books: " + bookRepository.findAll().size());
-            System.out.println("   - Active loans: " + loanRepository.findActiveLoans().size());
-            System.out.println("   - Total loans: " + loanRepository.findActiveLoans().size());
+            System.out.println("\n📊 System Statistics:");
+            System.out.println("   • Total books: " + bookRepository.findAll().size());
+            System.out.println("   • Active loans: " + loanRepository.findActiveLoans().size());
         } catch (Exception e) {
-            System.out.println(" Could not display system stats: " + e.getMessage());
+            System.out.println("⚠️  Could not display system stats: " + e.getMessage());
         }
     }
 }

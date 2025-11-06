@@ -4,28 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="Sprint2">
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/strategies/BookFineStrategyTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/infrastructure/notification/EmailNotifierTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/integration/LibrarySystemIntegrationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="Sprint2_Complete">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/model/EmailNotifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/service/ReminderService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/NotificationException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/service/ReminderServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/app/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/BorrowingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/app/BorrowingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/CatalogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/app/CatalogService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/LibrarySystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/presentation/controllers/LibrarySystemApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/application/service/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/application/service/AdminService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Loan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Loan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/repository/BookRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/repository/BookRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/service/BorrowingDomainService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/service/BorrowingDomainService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/service/OverdueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/service/OverdueService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/EmailNotifier.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/NotificationLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/NotificationLogger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/Observer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/Observer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/presentation/controllers/LibrarySystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/presentation/controllers/LibrarySystemApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/presentation/ui/LibrarySystemUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/presentation/ui/LibrarySystemUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/app/BorrowingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/app/BorrowingServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/app/CatalogServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/app/CatalogServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/BorrowingDomainServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/service/BorrowingDomainServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/OverdueServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/service/OverdueServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/integration/LibrarySystemIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/integration/LibrarySystemIntegrationTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,49 +63,50 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.ConsoleUI.executor": "Run",
-    "Application.LibrarySystemApp.executor": "Run",
-    "Application.LibrarySystemUI.executor": "Run",
-    "JUnit.AdminTest.executor": "Run",
-    "JUnit.All in library-sys (1).executor": "Run",
-    "JUnit.All in library-sys.executor": "Run",
-    "JUnit.BookTest.executor": "Run",
-    "JUnit.BorrowingServiceTest.testBorrowBookSuccess.executor": "Coverage",
-    "JUnit.LibrarianTest.executor": "Run",
-    "JUnit.OverdueServiceTest.executor": "Run",
-    "JUnit.UserTest.executor": "Run",
-    "JUnit.java in library-sys.executor": "Coverage",
-    "Maven.library-sys [clean].executor": "Run",
-    "Maven.library-sys [test].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "maramSprint2",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Documents/Desktop/Lib-sys-pro",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.7468355",
-    "settings.editor.selected.configurable": "advanced.settings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.ConsoleUI.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LibrarySystemApp.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LibrarySystemUI.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in library-sys (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in library-sys.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BorrowingServiceTest.testBorrowBookSuccess.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.LibrarianTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.OverdueServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.java in library-sys.executor&quot;: &quot;Coverage&quot;,
+    &quot;Maven.library-sys [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.library-sys [test].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;maramSprint2&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Documents/Desktop/Lib-sys-pro&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.7468355&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DELL\Desktop\ف1 سنة 4\software\Lib-sys-pro\src\main\java\com\library\domain" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="com.library.presentation" />
+      <recent name="com.library.domain.service" />
       <recent name="com.library.domain.model" />
+      <recent name="com.library.presentation" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="Library" />
@@ -312,7 +304,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761864416715</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Sprint2_Complete">
+      <option name="closed" value="true" />
+      <created>1761951335676</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1761951335676</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -344,7 +344,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Sprint1 Done." />
     <MESSAGE value="Sprint2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Sprint2" />
+    <MESSAGE value="Sprint2_Complete" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sprint2_Complete" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

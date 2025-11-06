@@ -7,7 +7,7 @@ import com.library.domain.model.Book;
 import com.library.domain.model.User;
 import com.library.domain.service.BorrowingDomainService;
 import com.library.domain.service.OverdueService;
-import com.library.infrastructure.notification.EmailNotifier;
+import com.library.domain.model.EmailNotifier;
 import com.library.repository.BookRepository;
 import com.library.repository.LoanRepository;
 import org.junit.jupiter.api.*;
