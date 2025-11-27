@@ -5,28 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="Sprint1 Done.">
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/app/AuthServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/app/BorrowingServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/app/CatalogServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/BorrowingDomainServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/BorrowingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/app/BorrowingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/app/LibrarySystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/app/LibrarySystemApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Admin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Loan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/model/Loan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/service/BorrowingDomainService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/service/BorrowingDomainService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/domain/service/OverdueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/domain/service/OverdueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/EmailNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/EmailNotifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/NotificationLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/infrastructure/notification/NotificationLogger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/presentation/ui/LibrarySystemUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/presentation/ui/LibrarySystemUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/app/BorrowingService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/OverdueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/Service/OverdueServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/model/AdminTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/model/AdminTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/model/BookTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/model/BookTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/model/LoanTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/model/LoanTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/library/domain/model/UserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/library/domain/model/UserTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,12 +34,12 @@
     &quot;assignee&quot;: &quot;aseelqusy&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/MaramSalmeyeh/Library-Management-System-.git",
-    "accountId": "407327f5-011d-4c5b-8081-918c06a96ab7"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MaramSalmeyeh/Library-Management-System-.git&quot;,
+    &quot;accountId&quot;: &quot;407327f5-011d-4c5b-8081-918c06a96ab7&quot;
   }
-}]]></component>
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -90,7 +69,7 @@
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;maramSprint2&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;sprint2&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/Documents/Desktop/Lib-sys-pro&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -260,6 +239,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="65ad0358-44e7-4849-bb9e-16e6a503dfb6" name="Changes" comment="" />
@@ -282,6 +269,7 @@
       <workItem from="1761688151159" duration="4504000" />
       <workItem from="1761770834040" duration="1881000" />
       <workItem from="1761842461276" duration="1993000" />
+      <workItem from="1764254543249" duration="937000" />
     </task>
     <task id="LOCAL-00001" summary="Sprint1 Done.">
       <option name="closed" value="true" />
