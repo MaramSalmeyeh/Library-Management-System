@@ -5,6 +5,7 @@ import com.library.service.AuthService;
 import com.library.service.BookService;
 import com.library.service.LoanService;
 import com.library.service.FineService;
+import com.library.service.BorrowingService;
 
 public class Main {
 
@@ -19,6 +20,7 @@ public class Main {
         LoanService loanService = new LoanService(storage);
         FineService fineService = new FineService(storage);
 
+        BorrowingService borrowingService = new BorrowingService(loanService, fineService);
         ConsoleMenu menu = new ConsoleMenu(authService, bookService, loanService, fineService);
         menu.run();
     }

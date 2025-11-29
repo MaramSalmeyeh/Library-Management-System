@@ -4,10 +4,7 @@ import com.library.domain.Admin;
 import com.library.domain.Book;
 import com.library.domain.Librarian;
 import com.library.domain.Loan;
-import com.library.service.AuthService;
-import com.library.service.BookService;
-import com.library.service.FineService;
-import com.library.service.LoanService;
+import com.library.service.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -18,6 +15,7 @@ public class ConsoleMenu {
     private final BookService bookService;
     private final LoanService loanService;
     private final FineService fineService;
+    private final BorrowingService borrowingService;
     private final Scanner scanner = new Scanner(System.in);
 
     public ConsoleMenu(AuthService authService,
@@ -28,6 +26,7 @@ public class ConsoleMenu {
         this.bookService = bookService;
         this.loanService = loanService;
         this.fineService = fineService;
+        this.borrowingService = new BorrowingService(loanService, fineService);
     }
 
     public void run() {
@@ -225,6 +224,8 @@ public class ConsoleMenu {
 
     // ===== Borrow book (user) – Sprint 2: US2.1 =====
 
+    // ===== Borrow book (user) – Sprint 2: US2.1 + Rule from US2.3 =====
+
     private void handleBorrowBook() {
         System.out.println("\n=== Borrow Book ===");
         System.out.print("Enter your user ID: ");
@@ -234,14 +235,20 @@ public class ConsoleMenu {
         String bookId = scanner.nextLine().trim();
 
         try {
-            Loan loan = loanService.borrowBook(userId, bookId);
+            // الآن نستخدم BorrowingService الذي يفحص الغرامات قبل الاستعارة
+            Loan loan = borrowingService.borrowBook(userId, bookId);
             System.out.println("Book borrowed successfully with loan ID: " + loan.getId());
             System.out.println("Borrow date: " + loan.getBorrowDate()
                     + ", Due date: " + loan.getDueDate());
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (IllegalStateException e) {
+            // مثلاً: "User has unpaid fines (...) ..."
             System.out.println("Could not borrow book: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            // مثل كتاب غير موجود
+            System.out.println("Error: " + e.getMessage());
         }
     }
+
 
     // ===== View overdue loans (librarian only) – Sprint 2: US2.2 =====
 
