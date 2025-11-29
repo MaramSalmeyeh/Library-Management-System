@@ -1,4 +1,4 @@
-package com.library.presentation.ui;
+package com.library.presentation;
 
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;

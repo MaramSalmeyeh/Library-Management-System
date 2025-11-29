@@ -1,4 +1,4 @@
-package com.library.application.service;
+package com.library.service;
 
 import com.library.domain.model.Book;
 

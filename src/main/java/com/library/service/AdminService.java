@@ -1,4 +1,4 @@
-package com.library.application.service;
+package com.library.service;
 
 /**
  * Minimal Admin service for Sprint 1 demo.
