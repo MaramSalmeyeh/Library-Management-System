@@ -1,0 +1,5 @@
+B4;Aseel Qusy;s12220983@stu.najah.edu;1234
+U2;Ola Ahmad;ola@gmail.com;pass123
+U3;yy;ty;ty
+U4;gg;gg;gg
+

@@ -15,13 +15,12 @@ public class LoanService {
     public LoanService(FileStorage storage) {
         this.storage = storage;
     }
+    public List<Loan> getLoansForUser(String userId) {
+        return storage.loadLoans().stream()
+                .filter(l -> l.getUserId().equals(userId))
+                .toList();
+    }
 
-    /**
-     * US2.1 Borrow book:
-     * - يتأكد إن الكتاب موجود ومش مستعار
-     * - يعلّم الكتاب borrowed = true
-     * - ينشئ Loan لمدة 28 يوم
-     */
     public Loan borrowBook(String userId, String bookId) {
         // 1) نجيب الكتب
         List<Book> books = storage.loadBooks();
@@ -131,4 +130,11 @@ public class LoanService {
     public List<Loan> getAllLoans() {
         return storage.loadLoans();
     }
+
+
+
+
 }
+
+
+
