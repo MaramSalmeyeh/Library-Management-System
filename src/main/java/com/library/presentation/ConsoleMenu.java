@@ -1,33 +1,41 @@
 package com.library.presentation;
 
-import com.library.domain.Admin;
-import com.library.domain.Book;
-import com.library.domain.Librarian;
-import com.library.domain.Loan;
+import com.library.domain.*;
 import com.library.service.*;
+
 
 import java.util.List;
 import java.util.Scanner;
-
 public class ConsoleMenu {
 
     private final AuthService authService;
+    private final UserService userService;
     private final BookService bookService;
     private final LoanService loanService;
     private final FineService fineService;
     private final BorrowingService borrowingService;
+    private final ReminderService reminderService;
+
     private final Scanner scanner = new Scanner(System.in);
 
     public ConsoleMenu(AuthService authService,
+                       UserService userService,
                        BookService bookService,
                        LoanService loanService,
-                       FineService fineService) {
+                       FineService fineService,
+                       ReminderService reminderService) {
         this.authService = authService;
+        this.userService = userService;
         this.bookService = bookService;
         this.loanService = loanService;
         this.fineService = fineService;
+        this.reminderService = reminderService;
+
+
         this.borrowingService = new BorrowingService(loanService, fineService);
     }
+
+
 
     public void run() {
         boolean running = true;
@@ -44,30 +52,42 @@ public class ConsoleMenu {
                     handleLibrarianLogin();
                     break;
                 case "3":
-                    handleLogout();
+                    handleUserSignup();
                     break;
                 case "4":
-                    handleAddBook();
+                    handleUserLogin();
                     break;
                 case "5":
-                    handleSearchBook();
+                    handleLogout();
                     break;
                 case "6":
-                    handleBorrowBook();
+                    handleAddBook();
                     break;
                 case "7":
-                    handleViewOverdueLoans();
+                    handleSearchBook();
                     break;
                 case "8":
-                    handlePayFine();
+                    handleBorrowBook();
                     break;
                 case "9":
+                    handleViewOverdueLoans();
+                    break;
+                case "10":
+                    handlePayFine();
+                    break;
+                case "11":
+                    handleSendOverdueReminders();
+                    break;
+                case "12":
                     System.out.println("Exiting... Goodbye!");
                     running = false;
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");
             }
+
+
+
 
         }
     }
@@ -76,15 +96,20 @@ public class ConsoleMenu {
         System.out.println("\n=== Library System ===");
         System.out.println("1. Admin login");
         System.out.println("2. Librarian login");
-        System.out.println("3. Logout");
-        System.out.println("4. Add book (admin only)");
-        System.out.println("5. Search book");
-        System.out.println("6. Borrow book");
-        System.out.println("7. View overdue loans (librarian only)");
-        System.out.println("8. Pay fine");
-        System.out.println("9. Exit");
+        System.out.println("3. User sign up");
+        System.out.println("4. User login");
+        System.out.println("5. Logout");
+        System.out.println("6. Add book (admin only)");
+        System.out.println("7. Search book");
+        System.out.println("8. Borrow book (user only)");
+        System.out.println("9. View overdue loans (librarian only)");
+        System.out.println("10. Pay fine");
+        System.out.println("11. Send overdue reminders");
+        System.out.println("12. Exit");
         System.out.print("Choose option: ");
     }
+
+
 
 
     // ===== Admin login =====
@@ -143,6 +168,50 @@ public class ConsoleMenu {
         authService.logout();
         System.out.println("Logout successful.");
     }
+
+    private void handleUserSignup() {
+        System.out.println("\n=== User Sign Up ===");
+
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine().trim();
+
+        System.out.print("Enter your email: ");
+        String email = scanner.nextLine().trim();
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine().trim();
+
+        try {
+            User user = userService.register(name, email, password);
+            System.out.println("User registered successfully with ID: " + user.getId());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Could not register user: " + e.getMessage());
+        }
+    }
+
+    private void handleUserLogin() {
+        if (authService.isUserLoggedIn()) {
+            System.out.println("Already logged in as: " + authService.getCurrentUser().getName());
+            return;
+        }
+
+        System.out.println("\n=== User Login ===");
+        System.out.print("Enter email: ");
+        String email = scanner.nextLine().trim();
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine().trim();
+
+        var user = userService.login(email, password);
+        if (user != null) {
+            authService.logout(); // clear other logins
+            authService.loginUser(email, password);
+            System.out.println("Welcome, " + user.getName() + "!");
+        } else {
+            System.out.println("Invalid email or password.");
+        }
+    }
+
 
     // ===== Add book (admin only, Sprint 1) =====
 
@@ -228,26 +297,29 @@ public class ConsoleMenu {
 
     private void handleBorrowBook() {
         System.out.println("\n=== Borrow Book ===");
-        System.out.print("Enter your user ID: ");
-        String userId = scanner.nextLine().trim();
+
+        if (!authService.isUserLoggedIn()) {
+            System.out.println("You must be logged in as a user to borrow a book.");
+            return;
+        }
+
+        String userId = authService.getCurrentUser().getId();
 
         System.out.print("Enter book ID to borrow (e.g., B1): ");
         String bookId = scanner.nextLine().trim();
 
         try {
-            // الآن نستخدم BorrowingService الذي يفحص الغرامات قبل الاستعارة
             Loan loan = borrowingService.borrowBook(userId, bookId);
             System.out.println("Book borrowed successfully with loan ID: " + loan.getId());
             System.out.println("Borrow date: " + loan.getBorrowDate()
                     + ", Due date: " + loan.getDueDate());
         } catch (IllegalStateException e) {
-            // مثلاً: "User has unpaid fines (...) ..."
             System.out.println("Could not borrow book: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            // مثل كتاب غير موجود
             System.out.println("Error: " + e.getMessage());
         }
     }
+
 
 
     // ===== View overdue loans (librarian only) – Sprint 2: US2.2 =====
@@ -279,8 +351,13 @@ public class ConsoleMenu {
 
     private void handlePayFine() {
         System.out.println("\n=== Pay Fine ===");
-        System.out.print("Enter your user ID: ");
-        String userId = scanner.nextLine().trim();
+
+        if (!authService.isUserLoggedIn()) {
+            System.out.println("You must be logged in as a user to pay your fines.");
+            return;
+        }
+
+        String userId = authService.getCurrentUser().getId();
 
         double balance = fineService.getUserOutstandingBalance(userId);
         if (balance <= 0) {
@@ -304,8 +381,52 @@ public class ConsoleMenu {
         System.out.println("Payment processed. Remaining balance = " + newBalance + " NIS");
 
         if (newBalance == 0) {
-            System.out.println("All fines are fully paid. You have regained borrowing rights (rule enforced in Sprint 4).");
+            System.out.println("All fines are fully paid. You have regained borrowing rights.");
         }
     }
+
+    private void handleSendOverdueReminders() {
+        if (!authService.isAdminLoggedIn()) {
+            System.out.println("You must login as admin to send overdue reminders.");
+            return;
+        }
+
+        System.out.println("\n=== Send Overdue Reminders ===");
+        try {
+            int count = reminderService.sendOverdueReminders();
+            if (count == 0) {
+                System.out.println("No overdue loans found. No emails were sent.");
+            } else {
+                System.out.println("Successfully sent " + count + " reminder email(s).");
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to send reminders: " + e.getMessage());
+        }
+    }
+
+    private void handleViewMyLoans() {
+        if (!authService.isUserLoggedIn()) {
+            System.out.println("You must log in as a user to view your loans.");
+            return;
+        }
+
+        var user = authService.getCurrentUser();
+        List<Loan> loans = loanService.getLoansForUser(user.getId());
+
+        if (loans.isEmpty()) {
+            System.out.println("You have no loans.");
+            return;
+        }
+
+        System.out.println("\n=== Your Loans ===");
+        for (Loan loan : loans) {
+            System.out.println("- Loan ID: " + loan.getId() +
+                    " | Book ID: " + loan.getBookId() +
+                    " | Borrow: " + loan.getBorrowDate() +
+                    " | Due: " + loan.getDueDate() +
+                    " | Returned: " + (loan.getReturnDate() == null ? "No" : loan.getReturnDate()));
+        }
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.library.service;
 import com.library.domain.Admin;
 import com.library.domain.FileStorage;
 import com.library.domain.Librarian;
+import com.library.domain.User;
 
 import java.util.List;
 
@@ -12,28 +13,26 @@ public class AuthService {
 
     private Admin currentAdmin;
     private Librarian currentLibrarian;
+    private User currentUser;
 
     public AuthService(FileStorage storage) {
         this.storage = storage;
     }
 
-    // ===== Admin login =====
+    // ===================== ADMIN LOGIN =====================
 
-    /**
-     * Sprint 1: Admin login
-     */
     public Admin login(String email, String password) {
         List<Admin> admins = storage.loadAdmins();
+        for (Admin a : admins) {
+            if (a.getEmail().equalsIgnoreCase(email) &&
+                    a.getPassword().equals(password)) {
 
-        for (Admin admin : admins) {
-            if (admin.getEmail().equalsIgnoreCase(email)
-                    && admin.getPassword().equals(password)) {
-                currentAdmin = admin;
-                return admin;
+                currentAdmin = a;
+                currentLibrarian = null;
+                currentUser = null;
+                return a;
             }
         }
-
-        currentAdmin = null;
         return null;
     }
 
@@ -45,23 +44,20 @@ public class AuthService {
         return currentAdmin;
     }
 
-    // ===== Librarian login =====
+    // ===================== LIBRARIAN LOGIN =====================
 
-    /**
-     * Sprint 2: Librarian login
-     */
     public Librarian loginLibrarian(String email, String password) {
         List<Librarian> librarians = storage.loadLibrarians();
+        for (Librarian l : librarians) {
+            if (l.getEmail().equalsIgnoreCase(email) &&
+                    l.getPassword().equals(password)) {
 
-        for (Librarian librarian : librarians) {
-            if (librarian.getEmail().equalsIgnoreCase(email)
-                    && librarian.getPassword().equals(password)) {
-                currentLibrarian = librarian;
-                return librarian;
+                currentLibrarian = l;
+                currentAdmin = null;
+                currentUser = null;
+                return l;
             }
         }
-
-        currentLibrarian = null;
         return null;
     }
 
@@ -73,10 +69,36 @@ public class AuthService {
         return currentLibrarian;
     }
 
-    // ===== Logout مشترك =====
+    // ===================== USER LOGIN (NEW) =====================
+
+    public User loginUser(String email, String password) {
+        List<User> users = storage.loadUsers();
+        for (User u : users) {
+            if (u.getEmail().equalsIgnoreCase(email) &&
+                    u.getPassword().equals(password)) {
+
+                currentUser = u;
+                currentAdmin = null;
+                currentLibrarian = null;
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public boolean isUserLoggedIn() {
+        return currentUser != null;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    // ===================== LOGOUT =====================
 
     public void logout() {
         currentAdmin = null;
         currentLibrarian = null;
+        currentUser = null;
     }
 }

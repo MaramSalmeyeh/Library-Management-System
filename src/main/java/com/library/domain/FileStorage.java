@@ -16,6 +16,7 @@ public class FileStorage {
 
 
 
+
     private Path adminsFile() {
         return baseDir.resolve("admins.txt");
     }
@@ -23,6 +24,11 @@ public class FileStorage {
     private Path librariansFile() {
         return baseDir.resolve("librarians.txt");
     }
+
+    private Path usersFile() {
+        return baseDir.resolve("users.txt");
+    }
+
 
     private Path booksFile() {
         return baseDir.resolve("books.txt");
@@ -106,7 +112,50 @@ public class FileStorage {
     }
 
 
+    public List<User> loadUsers() {
+        List<User> users = new ArrayList<>();
+        try {
+            if (!Files.exists(usersFile())) {
+                return users; // لا يوجد ملف → برجع ليست فاضية
+            }
+            for (String line : Files.readAllLines(usersFile())) {
+                if (line.isBlank()) continue;
+                String[] parts = line.split(";");
+                if (parts.length < 4) continue;
 
+                String id = parts[0];
+                String name = parts[1];
+                String email = parts[2];
+                String password = parts[3];
+
+                users.add(new User(id, name, email, password));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load users.txt", e);
+        }
+        return users;
+    }
+
+    public void saveUsers(List<User> users) {
+        List<String> lines = new ArrayList<>();
+        for (User u : users) {
+            String line = String.join(";",
+                    u.getId(),
+                    u.getName(),
+                    u.getEmail(),
+                    u.getPassword()
+            );
+            lines.add(line);
+        }
+        try {
+            Files.createDirectories(baseDir);
+            Files.write(usersFile(), lines,
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save users.txt", e);
+        }
+    }
 
 
     public List<Book> loadBooks() {
