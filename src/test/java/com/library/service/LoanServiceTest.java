@@ -6,6 +6,8 @@ import com.library.domain.Loan;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import com.library.domain.MediaType;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -41,6 +43,22 @@ class LoanServiceTest {
         storage = new FileStorage(tempDir.toString());
         loanService = new LoanService(storage);
     }
+
+    @Test
+    void borrowCd_createsLoanWith7DayDueDate_andMediaTypeCd() {
+        Loan loan = loanService.borrowCd("U1", "CD1");
+
+        assertNotNull(loan);
+        assertEquals("U1", loan.getUserId());
+        assertEquals("CD1", loan.getBookId());
+
+        // due date = borrowDate + 7
+        assertEquals(loan.getBorrowDate().plusDays(7), loan.getDueDate());
+
+        // media type لازم يكون CD
+        assertEquals(MediaType.CD, loan.getMediaType());
+    }
+
 
     @Test
     void borrowBook_marksBookAsBorrowed_andCreatesLoanFor28Days() {

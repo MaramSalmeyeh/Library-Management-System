@@ -2,6 +2,8 @@ package com.library.service;
 
 import com.library.domain.FileStorage;
 import com.library.domain.Fine;
+import com.library.domain.FineCalculator;
+import com.library.domain.MediaType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +11,23 @@ import java.util.List;
 public class FineService {
 
     private final FileStorage storage;
+    private final FineCalculator fineCalculator;
 
+    /**
+     * Default constructor: uses a default FineCalculator with standard strategies
+     * for each media type (e.g. BOOK=10, CD=20).
+     */
     public FineService(FileStorage storage) {
-        this.storage = storage;
+        this(storage, new FineCalculator());
     }
 
+    /**
+     * Constructor that allows injecting a custom FineCalculator (useful for tests).
+     */
+    public FineService(FileStorage storage, FineCalculator fineCalculator) {
+        this.storage = storage;
+        this.fineCalculator = fineCalculator;
+    }
 
     public List<Fine> getUserFines(String userId) {
         List<Fine> all = storage.loadFines();
@@ -46,9 +60,6 @@ public class FineService {
         return total;
     }
 
-
-
-
     public Fine createFine(String userId, double amount) {
         List<Fine> fines = storage.loadFines();
         String id = "F" + (fines.size() + 1);
@@ -59,6 +70,21 @@ public class FineService {
         return fine;
     }
 
+    /**
+     * Creates a fine for an overdue item using the Strategy Pattern.
+     *
+     * @param userId      id of the user who owns the item
+     * @param mediaType   BOOK or CD
+     * @param overdueDays number of overdue days (positive value means overdue)
+     * @return the created Fine, or null if no fine is due (overdueDays <= 0 or amount == 0)
+     */
+    public Fine createFineForOverdue(String userId, MediaType mediaType, long overdueDays) {
+        double amount = fineCalculator.calculate(mediaType, overdueDays);
+        if (amount <= 0.0) {
+            return null;
+        }
+        return createFine(userId, amount);
+    }
 
     public double payFine(String userId, double amountToPay) {
         if (amountToPay <= 0) {
@@ -91,14 +117,10 @@ public class FineService {
 
         storage.saveFines(fines);
 
-
         return getUserOutstandingBalance(userId);
     }
-
 
     public boolean hasUnpaidFines(String userId) {
         return getUserOutstandingBalance(userId) > 0.0;
     }
-
-
 }

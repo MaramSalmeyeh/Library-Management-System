@@ -3,6 +3,7 @@ package com.library.service;
 import com.library.domain.Book;
 import com.library.domain.FileStorage;
 import com.library.domain.Loan;
+import com.library.domain.MediaType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -66,6 +67,8 @@ public class LoanService {
 
         return loan;
     }
+
+
 
 
     public void returnBook(String loanId) {
@@ -165,6 +168,36 @@ public class LoanService {
 
         return false; // ما في ولا إعارة فعّالة
     }
+
+    /**
+     * استعارة CD لمدة 7 أيام.
+     * US5.1 Borrow CD
+     */
+    public Loan borrowCd(String userId, String cdId) {
+
+        // ما في عندنا حالياً جدول CDs، فبننشئ Loan مباشرة
+        List<Loan> loans = storage.loadLoans();
+        String loanId = "L" + (loans.size() + 1);
+
+        LocalDate borrowDate = LocalDate.now();
+        LocalDate dueDate = borrowDate.plusDays(7);
+
+        Loan loan = new Loan(
+                loanId,
+                userId,
+                cdId,
+                borrowDate,
+                dueDate,
+                null,
+                MediaType.CD        // ← أهم سطر: نوع الوسيط CD
+        );
+
+        loans.add(loan);
+        storage.saveLoans(loans);
+
+        return loan;
+    }
+
 
 
 

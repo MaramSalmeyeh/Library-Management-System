@@ -50,5 +50,32 @@ public class BorrowingService {
         return loanService.borrowBook(userId, bookId);
     }
 
+    /**
+     * Borrow CD مع نفس قواعد Sprint 4:
+     * - ممنوع يستعير لو عنده غرامات غير مدفوعة
+     * - ممنوع يستعير لو عنده إعارات متأخرة
+     */
+    public Loan borrowCd(String userId, String cdId) {
+
+        // 1) غرامات غير مدفوعة
+        double outstanding = fineService.getUserOutstandingBalance(userId);
+        if (outstanding > 0) {
+            throw new IllegalStateException(
+                    "User has unpaid fines (" + outstanding + "). Borrowing not allowed."
+            );
+        }
+
+        // 2) إعارات متأخرة (overdue)
+        if (loanService.hasOverdueLoans(userId)) {
+            throw new IllegalStateException(
+                    "User has overdue loans. Borrowing not allowed until overdue items are returned."
+            );
+        }
+
+        // 3) لو كل شيء تمام → نسمح بالاستعارة
+        return loanService.borrowCd(userId, cdId);
+    }
+
+
 
 }

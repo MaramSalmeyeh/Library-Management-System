@@ -213,7 +213,7 @@ public class FileStorage {
             for (String line : Files.readAllLines(loansFile())) {
                 if (line.isBlank()) continue;
 
-                // مهم: -1 عشان ما يحذف الحقل الفاضي الأخير
+                // مهم: -1 عشان ما يحذف الحقول الفاضية بالأخير
                 String[] parts = line.split(";", -1);
                 if (parts.length < 6) continue;
 
@@ -224,13 +224,20 @@ public class FileStorage {
                 LocalDate dueDate = LocalDate.parse(parts[4]);
                 LocalDate returnDate = parts[5].isEmpty() ? null : LocalDate.parse(parts[5]);
 
-                loans.add(new Loan(id, userId, bookId, borrowDate, dueDate, returnDate));
+                // NEW: mediaType (للأسطر القديمة ما في هذا الحقل → نعتبرها BOOK)
+                MediaType mediaType = MediaType.BOOK;
+                if (parts.length >= 7 && !parts[6].isBlank()) {
+                    mediaType = MediaType.valueOf(parts[6]);
+                }
+
+                loans.add(new Loan(id, userId, bookId, borrowDate, dueDate, returnDate, mediaType));
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load loans", e);
         }
         return loans;
     }
+
 
 
     public void saveLoans(List<Loan> loans) {
@@ -246,7 +253,8 @@ public class FileStorage {
                     loan.getBookId(),
                     loan.getBorrowDate().toString(),
                     loan.getDueDate().toString(),
-                    returnDateStr
+                    returnDateStr,
+                    loan.getMediaType().name()   // NEW
             );
             lines.add(line);
         }

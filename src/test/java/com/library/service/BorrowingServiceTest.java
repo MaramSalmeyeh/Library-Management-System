@@ -12,6 +12,8 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import com.library.domain.MediaType;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -104,4 +106,16 @@ class BorrowingServiceTest {
         assertTrue(ex.getMessage().toLowerCase().contains("unpaid"),
                 "Message should mention unpaid fines");
     }
+
+    @Test
+    void borrowCd_whenUserHasNoFines_succeedsWithCdMediaType() {
+        // لا يوجد غرامات على U1
+        Loan loan = borrowingService.borrowCd("U1", "CD1");
+
+        assertNotNull(loan);
+        assertEquals("U1", loan.getUserId());
+        assertEquals("CD1", loan.getBookId());
+        assertEquals(MediaType.CD, loan.getMediaType());
+    }
+
 }
