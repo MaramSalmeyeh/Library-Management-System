@@ -141,4 +141,6 @@ public class ConsoleMenuTest {
         assertTrue(output.contains("Invalid choice, please try again."));
         assertTrue(output.contains("Exiting..."));
     }
+
+
 }

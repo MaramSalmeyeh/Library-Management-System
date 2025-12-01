@@ -81,4 +81,61 @@ class LoanTest {
 
         assertEquals(MediaType.CD, loan.getMediaType());
     }
+
+    @Test
+    void oldConstructor_defaultsMediaTypeToBook() {
+        LocalDate borrow = LocalDate.of(2024, 1, 1);
+        LocalDate due    = LocalDate.of(2024, 1, 10);
+
+        Loan loan = new Loan("L1", "U1", "B1", borrow, due, null);
+
+        assertEquals("L1", loan.getId());
+        assertEquals("U1", loan.getUserId());
+        assertEquals("B1", loan.getBookId());
+        assertEquals(borrow, loan.getBorrowDate());
+        assertEquals(due, loan.getDueDate());
+        assertNull(loan.getReturnDate());
+        assertEquals(MediaType.BOOK, loan.getMediaType());
+    }
+
+    @Test
+    void newConstructor_usesPassedMediaTypeOrDefaultsWhenNull() {
+        LocalDate borrow = LocalDate.of(2024, 1, 1);
+        LocalDate due    = LocalDate.of(2024, 1, 10);
+
+        Loan cdLoan = new Loan("L2", "U2", "C1", borrow, due, null, MediaType.CD);
+        assertEquals(MediaType.CD, cdLoan.getMediaType());
+
+        Loan nullTypeLoan = new Loan("L3", "U3", "B2", borrow, due, null, null);
+        assertEquals(MediaType.BOOK, nullTypeLoan.getMediaType());
+    }
+
+    @Test
+    void isReturned_and_markReturned_behaveCorrectly() {
+        LocalDate borrow = LocalDate.of(2024, 1, 1);
+        LocalDate due    = LocalDate.of(2024, 1, 10);
+        Loan loan = new Loan("L1", "U1", "B1", borrow, due, null);
+
+        assertFalse(loan.isReturned());
+
+        LocalDate ret = LocalDate.of(2024, 1, 5);
+        loan.markReturned(ret);
+
+        assertTrue(loan.isReturned());
+        assertEquals(ret, loan.getReturnDate());
+    }
+
+    @Test
+    void isOverdue_trueOnlyWhenNotReturnedAndAfterDueDate() {
+        LocalDate borrow = LocalDate.of(2024, 1, 1);
+        LocalDate due    = LocalDate.of(2024, 1, 10);
+        Loan loan = new Loan("L1", "U1", "B1", borrow, due, null);
+
+        assertFalse(loan.isOverdue(LocalDate.of(2024, 1, 9)));
+        assertFalse(loan.isOverdue(LocalDate.of(2024, 1, 10)));
+        assertTrue(loan.isOverdue(LocalDate.of(2024, 1, 11)));
+
+        loan.markReturned(LocalDate.of(2024, 1, 8));
+        assertFalse(loan.isOverdue(LocalDate.of(2024, 1, 20)));
+    }
 }

@@ -314,4 +314,7 @@ public class FileStorage {
             throw new RuntimeException("Failed to save fines.txt", e);
         }
     }
+
+    public void saveLibrarians(List<Librarian> librarians) {
+    }
 }
