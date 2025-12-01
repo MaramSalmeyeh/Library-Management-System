@@ -1,4 +1,8 @@
 B2;harrypotter;aseel;566;true
 B2;alone;aseel;444;false
-B3;harrypotter;aseel;980;false
-B4;aseel;aseel;445;true
+B3;harrypotter;aseel;980;true
+B4;aseel;aseel;445;false
+B5;aseel;aseel;445;false
+B6;aseel;aseel;445;true
+B7;aseel;aseel;445;true
+B8;book333;moh;777;false

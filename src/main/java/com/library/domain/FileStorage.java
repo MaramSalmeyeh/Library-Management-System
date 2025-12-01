@@ -281,7 +281,7 @@ public class FileStorage {
                 fines.add(new Fine(id, userId, amount, paid));
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load fines", e);
+            throw new RuntimeException("Failed to load fines.txt", e);
         }
         return fines;
     }
@@ -303,7 +303,7 @@ public class FileStorage {
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save fines", e);
+            throw new RuntimeException("Failed to save fines.txt", e);
         }
     }
 }

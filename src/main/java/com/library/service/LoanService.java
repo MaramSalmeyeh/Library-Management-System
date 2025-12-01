@@ -22,7 +22,7 @@ public class LoanService {
     }
 
     public Loan borrowBook(String userId, String bookId) {
-        // 1) نجيب الكتب
+
         List<Book> books = storage.loadBooks();
 
         Book target = null;
@@ -41,11 +41,11 @@ public class LoanService {
             throw new IllegalStateException("Book is already borrowed");
         }
 
-        // 2) نحدّث حالة الكتاب
+
         target.setBorrowed(true);
         storage.saveBooks(books);
 
-        // 3) ننشئ Loan جديد
+
         List<Loan> loans = storage.loadLoans();
         String loanId = "L" + (loans.size() + 1);
 
@@ -67,11 +67,7 @@ public class LoanService {
         return loan;
     }
 
-    /**
-     * إرجاع كتاب:
-     * - يحدد returnDate
-     * - يعلّم الكتاب إنه مش مستعار
-     */
+
     public void returnBook(String loanId) {
         List<Loan> loans = storage.loadLoans();
         Loan targetLoan = null;
@@ -88,15 +84,15 @@ public class LoanService {
         }
 
         if (targetLoan.isReturned()) {
-            // already returned
+
             return;
         }
 
-        // حدد تاريخ الإرجاع
+
         targetLoan.markReturned(LocalDate.now());
         storage.saveLoans(loans);
 
-        // نحدّث حالة الكتاب
+
         List<Book> books = storage.loadBooks();
         for (Book book : books) {
             if (book.getId().equals(targetLoan.getBookId())) {
@@ -107,10 +103,7 @@ public class LoanService {
         storage.saveBooks(books);
     }
 
-    /**
-     * US2.2 Overdue detection:
-     * يرجع كل الـ loans المتأخرة عن تاريخ اليوم.
-     */
+
     public List<Loan> getOverdueLoans() {
         LocalDate today = LocalDate.now();
         List<Loan> loans = storage.loadLoans();
@@ -124,13 +117,54 @@ public class LoanService {
         return overdue;
     }
 
-    /**
-     * ممكن تستخدمها لعرض كل الإعارات
-     */
+
     public List<Loan> getAllLoans() {
         return storage.loadLoans();
     }
 
+    public boolean hasOverdueLoans(String userId) {
+        LocalDate today = LocalDate.now();
+        List<Loan> loans = storage.loadLoans();
+
+        for (Loan loan : loans) {
+
+            // إعارة لنفس المستخدم
+            if (!loan.getUserId().equals(userId)) {
+                continue;
+            }
+
+            // لو رجّع الكتاب، لا تعتبر متأخرة
+            if (loan.getReturnDate() != null) {
+                continue;
+            }
+
+            // إذا تاريخ الاستحقاق قبل اليوم → متأخر
+            if (loan.getDueDate().isBefore(today)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * Sprint 4 – يساعد US4.2:
+     * يفحص إذا كان لدى المستخدم أي إعارات فعّالة (لم تُرجع بعد).
+     */
+    public boolean hasActiveLoans(String userId) {
+        List<Loan> loans = storage.loadLoans();
+
+        for (Loan loan : loans) {
+            if (!loan.getUserId().equals(userId)) {
+                continue;
+            }
+            // loan فعّال إذا ما رجّع الكتاب
+            if (!loan.isReturned()) {
+                return true;
+            }
+        }
+
+        return false; // ما في ولا إعارة فعّالة
+    }
 
 
 

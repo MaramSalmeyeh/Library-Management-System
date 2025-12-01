@@ -26,16 +26,27 @@ public class FineService {
         return result;
     }
 
-
     public double getUserOutstandingBalance(String userId) {
         double total = 0.0;
+        System.out.println("DEBUG - FineService.getUserOutstandingBalance for userId = [" + userId + "]");
+
         for (Fine f : storage.loadFines()) {
-            if (f.getUserId().equals(userId) && !f.isPaid()) {
+            System.out.println("DEBUG - checking fine: id=" + f.getId()
+                    + ", userId=[" + f.getUserId() + "]"
+                    + ", amount=" + f.getAmount()
+                    + ", paid=" + f.isPaid());
+
+            // نستخدم trim() عشان لو في مسافات زيادة في الملف
+            if (f.getUserId().trim().equals(userId.trim()) && !f.isPaid()) {
                 total += f.getAmount();
             }
         }
+
+        System.out.println("DEBUG - total outstanding = " + total);
         return total;
     }
+
+
 
 
     public Fine createFine(String userId, double amount) {
@@ -83,4 +94,11 @@ public class FineService {
 
         return getUserOutstandingBalance(userId);
     }
+
+
+    public boolean hasUnpaidFines(String userId) {
+        return getUserOutstandingBalance(userId) > 0.0;
+    }
+
+
 }

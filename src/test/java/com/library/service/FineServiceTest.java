@@ -30,7 +30,7 @@ class FineServiceTest {
         Files.write(tempDir.resolve("loans.txt"), List.of());
 
         // نبدأ بدون غرامات
-        Files.write(tempDir.resolve("fines.txt"), List.of());
+        Files.write(tempDir.resolve("fines.txt.txt"), List.of());
 
         storage = new FileStorage(tempDir.toString());
         fineService = new FineService(storage);

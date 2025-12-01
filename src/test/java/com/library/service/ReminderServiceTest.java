@@ -53,7 +53,7 @@ class ReminderServiceTest {
         Files.write(tempDir.resolve("admins.txt"), List.of());
         Files.write(tempDir.resolve("librarians.txt"), List.of());
         Files.write(tempDir.resolve("books.txt"), List.of());
-        Files.write(tempDir.resolve("fines.txt"), List.of());
+        Files.write(tempDir.resolve("fines.txt.txt"), List.of());
         Files.write(tempDir.resolve("loans.txt"), List.of());
 
         storage = new FileStorage(tempDir.toString());

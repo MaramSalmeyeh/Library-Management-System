@@ -30,7 +30,7 @@ class LoanServiceTest {
         Files.write(tempDir.resolve("admins.txt"), List.of());
         Files.write(tempDir.resolve("librarians.txt"), List.of());
         Files.write(tempDir.resolve("loans.txt"), List.of());
-        Files.write(tempDir.resolve("fines.txt"), List.of());
+        Files.write(tempDir.resolve("fines.txt.txt"), List.of());
 
         // نضيف كتاب واحد قابل للاستعارة
         Files.write(

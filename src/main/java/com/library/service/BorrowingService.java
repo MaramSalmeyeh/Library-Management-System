@@ -23,15 +23,32 @@ public class BorrowingService {
      *
      * @throws IllegalStateException إذا كان لدى المستخدم غرامات غير مدفوعة.
      */
+    /**
+     * Borrow book مع فحص الغرامات والقروض المتأخرة.
+     *
+     * @throws IllegalStateException إذا كان لدى المستخدم غرامات غير مدفوعة
+     *                               أو لديه إعارات متأخرة.
+     */
     public Loan borrowBook(String userId, String bookId) {
+
+        // 1) غرامات غير مدفوعة
         double outstanding = fineService.getUserOutstandingBalance(userId);
         if (outstanding > 0) {
             throw new IllegalStateException(
-                    "User has unpaid fines (" + outstanding + "). Borrowing is not allowed until full payment."
+                    "User has unpaid fines (" + outstanding + "). Borrowing not allowed."
             );
         }
 
-        // مافي غرامات → نسمح بالاستعارة
+        // 2) إعارات متأخرة (overdue)
+        if (loanService.hasOverdueLoans(userId)) {
+            throw new IllegalStateException(
+                    "User has overdue loans. Borrowing not allowed until overdue items are returned."
+            );
+        }
+
+        // 3) لو كل شيء تمام → نسمح بالاستعارة
         return loanService.borrowBook(userId, bookId);
     }
+
+
 }

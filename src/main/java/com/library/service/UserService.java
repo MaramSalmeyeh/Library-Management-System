@@ -75,4 +75,49 @@ public class UserService {
                 .orElse(null);
     }
 
+    /**
+     * Sprint 4 – US4.2 Unregister user
+     *
+     * يحذف مستخدم من النظام إذا:
+     *  - ما عنده قروض فعّالة (كل الكتب مرجعة)
+     *  - ما عنده غرامات غير مدفوعة
+     *
+     * @throws IllegalStateException    إذا كان عنده قروض أو غرامات
+     * @throws IllegalArgumentException إذا المستخدم غير موجود
+     */
+    public void unregisterUser(String userId,
+                               LoanService loanService,
+                               FineService fineService) {
+
+        // 1) فحص القروض الفعّالة
+        if (loanService != null && loanService.hasActiveLoans(userId)) {
+            throw new IllegalStateException(
+                    "User has active loans. Cannot unregister until all books are returned."
+            );
+        }
+
+        // 2) فحص الغرامات غير المدفوعة
+        if (fineService != null && fineService.getUserOutstandingBalance(userId) > 0.0) {
+            throw new IllegalStateException(
+                    "User has unpaid fines. Cannot unregister until all fines are paid."
+            );
+        }
+
+        // 3) حذف المستخدم من ملف users.txt
+        List<User> users = storage.loadUsers();
+        boolean removed = users.removeIf(u -> u.getId().equals(userId));
+
+        if (!removed) {
+            throw new IllegalArgumentException("User with id " + userId + " not found.");
+        }
+
+        storage.saveUsers(users);
+
+        // 4) لو كان هو ال currentUser → نعمل له logout
+        if (currentUser != null && currentUser.getId().equals(userId)) {
+            currentUser = null;
+        }
+    }
+
+
 }

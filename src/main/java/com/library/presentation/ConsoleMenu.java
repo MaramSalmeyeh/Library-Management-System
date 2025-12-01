@@ -79,12 +79,16 @@ public class ConsoleMenu {
                     handleSendOverdueReminders();
                     break;
                 case "12":
+                    handleUnregisterUser();
+                    break;
+                case "13":
                     System.out.println("Exiting... Goodbye!");
                     running = false;
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");
             }
+
 
 
 
@@ -105,9 +109,11 @@ public class ConsoleMenu {
         System.out.println("9. View overdue loans (librarian only)");
         System.out.println("10. Pay fine");
         System.out.println("11. Send overdue reminders");
-        System.out.println("12. Exit");
+        System.out.println("12. Unregister user (admin only)");
+        System.out.println("13. Exit");
         System.out.print("Choose option: ");
     }
+
 
 
 
@@ -353,7 +359,7 @@ public class ConsoleMenu {
         System.out.println("\n=== Pay Fine ===");
 
         if (!authService.isUserLoggedIn()) {
-            System.out.println("You must be logged in as a user to pay your fines.");
+            System.out.println("You must be logged in as a user to pay your fines.txt.");
             return;
         }
 
@@ -361,11 +367,11 @@ public class ConsoleMenu {
 
         double balance = fineService.getUserOutstandingBalance(userId);
         if (balance <= 0) {
-            System.out.println("You have no outstanding fines.");
+            System.out.println("You have no outstanding fines.txt.");
             return;
         }
 
-        System.out.println("Your current outstanding fines = " + balance + " NIS");
+        System.out.println("Your current outstanding fines.txt = " + balance + " NIS");
         System.out.print("Enter amount to pay: ");
 
         String input = scanner.nextLine().trim();
@@ -381,7 +387,7 @@ public class ConsoleMenu {
         System.out.println("Payment processed. Remaining balance = " + newBalance + " NIS");
 
         if (newBalance == 0) {
-            System.out.println("All fines are fully paid. You have regained borrowing rights.");
+            System.out.println("All fines.txt are fully paid. You have regained borrowing rights.");
         }
     }
 
@@ -427,6 +433,30 @@ public class ConsoleMenu {
                     " | Returned: " + (loan.getReturnDate() == null ? "No" : loan.getReturnDate()));
         }
     }
+
+    // ===== Unregister user (admin only) – Sprint 4: US4.2 =====
+
+    private void handleUnregisterUser() {
+        System.out.println("\n=== Unregister User ===");
+
+        if (!authService.isAdminLoggedIn()) {
+            System.out.println("You must login as admin to unregister a user.");
+            return;
+        }
+
+        System.out.print("Enter user ID to unregister (e.g., U1): ");
+        String userId = scanner.nextLine().trim();
+
+        try {
+            userService.unregisterUser(userId, loanService, fineService);
+            System.out.println("User " + userId + " was unregistered successfully.");
+        } catch (IllegalStateException e) {
+            System.out.println("Could not unregister user: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
 
 
 }
