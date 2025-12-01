@@ -171,6 +171,7 @@ public class ConsoleMenuTest {
         assertEquals("Clean Code", books.get(0).getTitle());
     }
 
+
     @Test
     void borrowBookFlow_marksBookBorrowedAndCreatesLoan() throws IOException {
         FileStorage storage = new FileStorage(tempDir.toString());
@@ -260,6 +261,8 @@ public class ConsoleMenuTest {
 
         assertTrue(output.contains("You must login as admin to send overdue reminders."));
     }
+
+
 
 
 }
