@@ -142,5 +142,124 @@ public class ConsoleMenuTest {
         assertTrue(output.contains("Exiting..."));
     }
 
+    @Test
+    void adminCanAddAndSearchBook_afterLoggingIn() throws IOException {
+        FileStorage storage = new FileStorage(tempDir.toString());
+        storage.saveAdmins(List.of(new Admin("A1", "Chief", "chief@example.com", "pwd")));
+
+        String script = String.join(System.lineSeparator(),
+                "1",                     // admin login
+                "chief@example.com",
+                "pwd",
+                "6",                     // add book
+                "Clean Code",            // title
+                "Robert C. Martin",      // author
+                "9780132350884",         // isbn
+                "7",                     // search book
+                "3",                     // search by isbn
+                "9780132350884",
+                "13"                    // exit
+        ) + System.lineSeparator();
+
+        String output = runMenuWithInput(script, storage, null);
+
+        assertTrue(output.contains("Book added successfully with ID:"));
+        assertTrue(output.contains("| ISBN: 9780132350884"));
+
+        List<com.library.domain.Book> books = storage.loadBooks();
+        assertEquals(1, books.size());
+        assertEquals("Clean Code", books.get(0).getTitle());
+    }
+
+    @Test
+    void borrowBookFlow_marksBookBorrowedAndCreatesLoan() throws IOException {
+        FileStorage storage = new FileStorage(tempDir.toString());
+        storage.saveBooks(List.of(new com.library.domain.Book("B1", "1984", "George Orwell", "ISBN-1984", false)));
+
+        String script = String.join(System.lineSeparator(),
+                "3",               // sign up
+                "Borrower",        // name
+                "borrower@ex.com", // email
+                "pwd123",          // password
+                "4",               // login
+                "borrower@ex.com",
+                "pwd123",
+                "8",               // borrow book
+                "1",               // media type book
+                "B1",              // book id
+                "13"               // exit
+        ) + System.lineSeparator();
+
+        String output = runMenuWithInput(script, storage, null);
+
+        assertTrue(output.contains("Item borrowed successfully with loan ID:"));
+
+        List<com.library.domain.Book> books = storage.loadBooks();
+        assertTrue(books.get(0).isBorrowed());
+
+        assertEquals(1, storage.loadLoans().size());
+    }
+
+    @Test
+    void borrowBookWithInvalidType_showsFriendlyMessage() throws IOException {
+        FileStorage storage = new FileStorage(tempDir.toString());
+
+        String script = String.join(System.lineSeparator(),
+                "3",          // sign up
+                "Borrower",
+                "user@ex.com",
+                "pwd",
+                "4",          // login
+                "user@ex.com",
+                "pwd",
+                "8",          // borrow menu
+                "3",          // invalid media type
+                "13"          // exit
+        ) + System.lineSeparator();
+
+        String output = runMenuWithInput(script, storage, null);
+
+        assertTrue(output.contains("Invalid media type choice."));
+    }
+
+    @Test
+    void payFineFlow_reducesOutstandingBalanceAndPrintsMessages() throws IOException {
+        FileStorage storage = new FileStorage(tempDir.toString());
+        storage.saveUsers(List.of(new User("U1", "Paying User", "pay@ex.com", "pwd")));
+        storage.saveFines(List.of(
+                new com.library.domain.Fine("F1", "U1", 30.0, false)
+        ));
+
+        String script = String.join(System.lineSeparator(),
+                "4",             // login
+                "pay@ex.com",
+                "pwd",
+                "10",            // pay fine
+                "30",            // amount
+                "13"             // exit
+        ) + System.lineSeparator();
+
+        String output = runMenuWithInput(script, storage, null);
+
+        assertTrue(output.contains("Your current outstanding fines.txt = 30.0 NIS"));
+        assertTrue(output.contains("Remaining balance = 0.0 NIS"));
+
+        assertEquals(0.0, storage.loadFines().get(0).getAmount());
+    }
+
+    @Test
+    void sendRemindersWithoutAdminLogin_showsGuardMessage() throws IOException {
+        FileStorage storage = new FileStorage(tempDir.toString());
+
+        String script = String.join(System.lineSeparator(),
+                "11",   // attempt to send reminders
+                "13"    // exit
+        ) + System.lineSeparator();
+
+        String output = runMenuWithInput(script, storage, null);
+
+        assertTrue(output.contains("You must login as admin to send overdue reminders."));
+    }
+
 
 }
