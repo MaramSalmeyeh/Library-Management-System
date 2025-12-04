@@ -30,6 +30,18 @@ class AuthServiceTest {
         );
         Files.write(adminsFile, adminsLines);
 
+        Path librariansFile = tempDir.resolve("librarians.txt");
+        List<String> librarianLines = List.of(
+                "L1;Lib One;librarian@example.com;libpwd"
+        );
+        Files.write(librariansFile, librarianLines);
+
+        Path usersFile = tempDir.resolve("users.txt");
+        List<String> userLines = List.of(
+                "U1;User One;user@example.com;userpwd"
+        );
+        Files.write(usersFile, userLines);
+
 
         FileStorage storage = new FileStorage(tempDir.toString());
 
@@ -71,5 +83,35 @@ class AuthServiceTest {
         authService.logout();
 
         assertFalse(authService.isAdminLoggedIn(), "After logout no admin should be logged in");
+    }
+
+    @Test
+    void librarianLogin_setsCurrentLibrarianAndClearsOthers() {
+        assertNull(authService.getCurrentLibrarian());
+
+        var librarian = authService.loginLibrarian("librarian@example.com", "libpwd");
+
+        assertNotNull(librarian);
+        assertEquals("Lib One", librarian.getName());
+        assertTrue(authService.isLibrarianLoggedIn());
+        assertFalse(authService.isAdminLoggedIn());
+        assertFalse(authService.isUserLoggedIn());
+    }
+
+    @Test
+    void userLogin_setsCurrentUserAndResetsOtherRoles() {
+        var user = authService.loginUser("user@example.com", "userpwd");
+
+        assertNotNull(user);
+        assertEquals("User One", user.getName());
+
+        // log in as admin then ensure user login clears it
+        authService.login("admin@example.com", "1234");
+        assertTrue(authService.isAdminLoggedIn());
+
+        authService.loginUser("user@example.com", "userpwd");
+        assertTrue(authService.isUserLoggedIn());
+        assertFalse(authService.isAdminLoggedIn());
+        assertFalse(authService.isLibrarianLoggedIn());
     }
 }

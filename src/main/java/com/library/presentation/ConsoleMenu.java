@@ -105,7 +105,7 @@ public class ConsoleMenu {
         System.out.println("5. Logout");
         System.out.println("6. Add book (admin only)");
         System.out.println("7. Search book");
-        System.out.println("8. Borrow book (user only)");
+        System.out.println("8. Borrow book/CD (user only)");
         System.out.println("9. View overdue loans (librarian only)");
         System.out.println("10. Pay fine");
         System.out.println("11. Send overdue reminders");
@@ -301,30 +301,54 @@ public class ConsoleMenu {
 
     // ===== Borrow book (user) – Sprint 2: US2.1 + Rule from US2.3 =====
 
+    // ===== Borrow item (book / CD) – Sprint 2 + Sprint 5 =====
     private void handleBorrowBook() {
-        System.out.println("\n=== Borrow Book ===");
+        System.out.println("\n=== Borrow Item (Book / CD) ===");
 
         if (!authService.isUserLoggedIn()) {
-            System.out.println("You must be logged in as a user to borrow a book.");
+            System.out.println("You must be logged in as a user to borrow.");
             return;
         }
 
         String userId = authService.getCurrentUser().getId();
 
-        System.out.print("Enter book ID to borrow (e.g., B1): ");
-        String bookId = scanner.nextLine().trim();
+        System.out.println("Choose media type:");
+        System.out.println("1. Book");
+        System.out.println("2. CD");
+        System.out.print("Enter choice (1 or 2): ");
+        String typeChoice = scanner.nextLine().trim();
 
         try {
-            Loan loan = borrowingService.borrowBook(userId, bookId);
-            System.out.println("Book borrowed successfully with loan ID: " + loan.getId());
+            Loan loan;
+
+            if ("1".equals(typeChoice)) {
+                System.out.print("Enter book ID to borrow (e.g., B1): ");
+                String bookId = scanner.nextLine().trim();
+
+                loan = borrowingService.borrowBook(userId, bookId);
+
+            } else if ("2".equals(typeChoice)) {
+                System.out.print("Enter CD ID to borrow (e.g., CD1): ");
+                String cdId = scanner.nextLine().trim();
+
+                loan = borrowingService.borrowCd(userId, cdId);
+
+            } else {
+                System.out.println("Invalid media type choice.");
+                return;
+            }
+
+            System.out.println("Item borrowed successfully with loan ID: " + loan.getId());
             System.out.println("Borrow date: " + loan.getBorrowDate()
                     + ", Due date: " + loan.getDueDate());
+
         } catch (IllegalStateException e) {
-            System.out.println("Could not borrow book: " + e.getMessage());
+            System.out.println("Could not borrow item: " + e.getMessage());
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
 
 
 
