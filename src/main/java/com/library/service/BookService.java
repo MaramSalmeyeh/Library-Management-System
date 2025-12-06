@@ -28,7 +28,7 @@ public class BookService {
         }
 
 
-        String id = "B" + (books.size() + 1);   // ID بسيط: B1, B2, ...
+        String id = "B" + (books.size() + 1);
 
         Book newBook = new Book(id, title, author, isbn, false);
         books.add(newBook);

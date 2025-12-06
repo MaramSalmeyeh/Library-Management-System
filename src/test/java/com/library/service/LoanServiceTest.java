@@ -28,13 +28,13 @@ class LoanServiceTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        // نجهز ملفات DB الفاضية/الأساسية
+
         Files.write(tempDir.resolve("admins.txt"), List.of());
         Files.write(tempDir.resolve("librarians.txt"), List.of());
         Files.write(tempDir.resolve("loans.txt"), List.of());
         Files.write(tempDir.resolve("fines.txt.txt"), List.of());
 
-        // نضيف كتاب واحد قابل للاستعارة
+
         Files.write(
                 tempDir.resolve("books.txt"),
                 List.of("B1;Harry Potter;Rowling;111;false")
@@ -52,10 +52,10 @@ class LoanServiceTest {
         assertEquals("U1", loan.getUserId());
         assertEquals("CD1", loan.getBookId());
 
-        // due date = borrowDate + 7
+
         assertEquals(loan.getBorrowDate().plusDays(7), loan.getDueDate());
 
-        // media type لازم يكون CD
+
         assertEquals(MediaType.CD, loan.getMediaType());
     }
 
@@ -68,15 +68,15 @@ class LoanServiceTest {
         assertEquals("U1", loan.getUserId());
         assertEquals("B1", loan.getBookId());
 
-        // نتأكد إن الـ dueDate بعد 28 يوم من borrowDate
+
         assertEquals(loan.getBorrowDate().plusDays(28), loan.getDueDate());
 
-        // نتأكد إن الكتاب صار borrowed = true
+
         List<Book> booksAfter = storage.loadBooks();
         assertEquals(1, booksAfter.size());
         assertTrue(booksAfter.get(0).isBorrowed());
 
-        // نتأكد إن الـ loan انخزن في الملف
+
         List<Loan> loans = storage.loadLoans();
         assertEquals(1, loans.size());
         assertEquals("U1", loans.get(0).getUserId());
@@ -84,29 +84,29 @@ class LoanServiceTest {
 
     @Test
     void borrowBook_onAlreadyBorrowedBook_throwsException() {
-        // أول مرة: borrow عادي
+
         loanService.borrowBook("U1", "B1");
 
-        // ثاني مرة: لازم يرمي IllegalStateException
+
         assertThrows(IllegalStateException.class,
                 () -> loanService.borrowBook("U2", "B1"));
     }
 
     @Test
     void returnBook_setsReturnDate_andMarksBookAvailable() {
-        // نعمل إعارة
+
         Loan loan = loanService.borrowBook("U1", "B1");
         String loanId = loan.getId();
 
-        // نرجّع الكتاب
+
         loanService.returnBook(loanId);
 
-        // نتأكد أن الـ loan صار له returnDate
+
         List<Loan> loans = storage.loadLoans();
         assertEquals(1, loans.size());
         assertTrue(loans.get(0).isReturned());
 
-        // نتأكد أن الكتاب صار مش مستعار
+
         List<Book> books = storage.loadBooks();
         assertEquals(1, books.size());
         assertFalse(books.get(0).isBorrowed());
@@ -114,23 +114,23 @@ class LoanServiceTest {
 
     @Test
     void getOverdueLoans_returnsOnlyLoansPastDueDate_andNotReturned() throws IOException {
-        // نحضّر loans بشكل مباشر
+
         List<Loan> loans = new ArrayList<>();
         LocalDate today = LocalDate.now();
 
-        // Loan متأخر (dueDate قبل اليوم، ما رجع)
+
         loans.add(new Loan("L1", "U1", "B1",
                 today.minusDays(30),  // borrow
                 today.minusDays(2),   // due
                 null));               // not returned
 
-        // Loan مش متأخر (dueDate بعد اليوم)
+
         loans.add(new Loan("L2", "U2", "B1",
                 today.minusDays(5),
                 today.plusDays(5),
                 null));
 
-        // Loan قديم لكن already returned
+
         loans.add(new Loan("L3", "U3", "B1",
                 today.minusDays(40),
                 today.minusDays(10),
@@ -159,23 +159,23 @@ class LoanServiceTest {
         LocalDate today = LocalDate.now();
 
         List<Loan> loans = new ArrayList<>();
-        // متأخر ومش مرجع
+
         loans.add(new Loan("L1", "U1", "B1",
                 today.minusDays(20), today.minusDays(1), null));
 
-        // متأخر لكن مرجع → ما ينحسب
+
         loans.add(new Loan("L2", "U1", "B2",
                 today.minusDays(30), today.minusDays(5), today.minusDays(2)));
 
-        // متأخر لمستخدم آخر → لازم يرجع صحيح لو سألنا عن U2 فقط
+
         loans.add(new Loan("L3", "U2", "B3",
                 today.minusDays(25), today.minusDays(3), null));
 
-        // غير متأخر
+
         loans.add(new Loan("L4", "U1", "B4",
                 today.minusDays(2), today.plusDays(5), null));
 
-        // مستخدم ثالث بدون أي إعارات متأخرة
+
         loans.add(new Loan("L5", "U3", "B5",
                 today.minusDays(2), today.plusDays(10), null));
 
@@ -191,15 +191,15 @@ class LoanServiceTest {
         LocalDate today = LocalDate.now();
         List<Loan> loans = new ArrayList<>();
 
-        // Loan مستحق لكن مرجع → غير فعّال
+
         loans.add(new Loan("L1", "U1", "B1",
                 today.minusDays(10), today.minusDays(2), today.minusDays(1)));
 
-        // Loan غير مرجع → فعّال
+
         loans.add(new Loan("L2", "U1", "B2",
                 today.minusDays(3), today.plusDays(10), null));
 
-        // Loan لمستخدم ثاني
+
         loans.add(new Loan("L3", "U2", "B3",
                 today.minusDays(5), today.plusDays(2), null));
 
@@ -208,7 +208,7 @@ class LoanServiceTest {
         assertTrue(loanService.hasActiveLoans("U1"));
         assertTrue(loanService.hasActiveLoans("U2"));
 
-        // بعد ما نرجع إعارة U2، المفروض يطلع false
+
         loanService.returnBook("L3");
         assertFalse(loanService.hasActiveLoans("U2"));
     }

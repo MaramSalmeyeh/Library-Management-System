@@ -27,20 +27,20 @@ class BorrowingServiceTest {
     private FineService fineService;
     private BorrowingService borrowingService;
 
-    // ثوابت بسيطة نعيد استخدامها
+
     private static final String USER_ID = "U1";
     private static final String BOOK_ID = "B1";
 
     @BeforeEach
     void setUp() throws IOException {
-        // نجهز ملفات الـ DB الفاضية
+
         Files.write(tempDir.resolve("admins.txt"), List.of());
         Files.write(tempDir.resolve("librarians.txt"), List.of());
         Files.write(tempDir.resolve("users.txt"), List.of());
         Files.write(tempDir.resolve("loans.txt"), List.of());
         Files.write(tempDir.resolve("fines.txt"), List.of());
 
-        // نضيف كتاب واحد متاح للاستعارة (borrowed = false)
+
         Files.write(
                 tempDir.resolve("books.txt"),
                 List.of("B1;Test Book;Author;111;false")
@@ -52,7 +52,7 @@ class BorrowingServiceTest {
         borrowingService = new BorrowingService(loanService, fineService);
     }
 
-    // ✅ الحالة الطبيعية: لا غرامات ولا كتب متأخرة → مسموح يستعير
+
     @Test
     void borrowBook_whenUserIsClean_createsLoan() {
         Loan loan = borrowingService.borrowBook(USER_ID, BOOK_ID);
@@ -61,13 +61,13 @@ class BorrowingServiceTest {
         assertEquals(USER_ID, loan.getUserId());
         assertEquals(BOOK_ID, loan.getBookId());
 
-        // نتأكد إن الـ loan انحفظ في الملف
+
         List<Loan> loans = storage.loadLoans();
         assertEquals(1, loans.size());
         assertEquals(USER_ID, loans.get(0).getUserId());
     }
 
-    // ✅ عنده كتب متأخرة (overdue) → لازم يمنعه
+
     @Test
     void borrowBook_whenUserHasOverdueLoans_throwsException() {
         LocalDate today = LocalDate.now();
@@ -77,9 +77,9 @@ class BorrowingServiceTest {
                 "L1",
                 USER_ID,
                 BOOK_ID,
-                today.minusDays(40),   // استعار من زمان
-                today.minusDays(10),   // dueDate قديم
-                null                   // ما رجّع الكتاب → متأخر
+                today.minusDays(40),
+                today.minusDays(10),
+                null
         ));
         storage.saveLoans(loans);
 
@@ -92,10 +92,10 @@ class BorrowingServiceTest {
                 "Message should mention overdue loans");
     }
 
-    // ✅ عنده غرامات غير مدفوعة → لازم يمنعه
+
     @Test
     void borrowBook_whenUserHasUnpaidFines_throwsException() {
-        // نضيف غرامة غير مدفوعة على U1
+
         fineService.createFine(USER_ID, 20.0);
 
         IllegalStateException ex = assertThrows(
@@ -109,7 +109,7 @@ class BorrowingServiceTest {
 
     @Test
     void borrowCd_whenUserHasNoFines_succeedsWithCdMediaType() {
-        // لا يوجد غرامات على U1
+
         Loan loan = borrowingService.borrowCd("U1", "CD1");
 
         assertNotNull(loan);

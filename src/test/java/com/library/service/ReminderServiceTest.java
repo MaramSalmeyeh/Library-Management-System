@@ -25,10 +25,7 @@ class ReminderServiceTest {
     private CapturingEmailService emailService;
     private ReminderService reminderService;
 
-    /**
-     * EmailService مزيف – بدل ما يرسل إيميل حقيقي،
-     * بس يخزن البيانات عشان التيست يتحقق منها.
-     */
+
     static class CapturingEmailService extends EmailService {
 
         List<String> toList = new ArrayList<>();
@@ -36,7 +33,7 @@ class ReminderServiceTest {
         List<String> bodyList = new ArrayList<>();
 
         CapturingEmailService() {
-            // قيم وهمية – مش رح نستخدمهم، بس لازم نمررهم للـ super
+
             super("test@example.com", "dummy-password");
         }
 
@@ -74,8 +71,7 @@ class ReminderServiceTest {
     void sendOverdueReminders_sendsOneEmailPerOverdueLoan() throws IOException {
         LocalDate today = LocalDate.now();
 
-        // L1: متأخر
-        // L2: مش متأخر (due بالمستقبل)
+
         List<String> loansLines = List.of(
                 "L1;user1@example.com;B1;" +
                         today.minusDays(40) + ";" +
@@ -98,7 +94,7 @@ class ReminderServiceTest {
 
     @Test
     void sendOverdueReminders_whenNoOverdueLoans_sendsNoEmails() throws IOException {
-        // ولا Loan متأخر
+
         LocalDate today = LocalDate.now();
         List<String> loansLines = List.of(
                 "L1;user1@example.com;B1;" + today.minusDays(5) + ";" + today.plusDays(10) + ";"
@@ -114,12 +110,12 @@ class ReminderServiceTest {
 
     static class FakeUserService extends UserService {
         public FakeUserService() {
-            super(null); // ما بدنا FileStorage حقيقي
+            super(null);
         }
 
         @Override
         public User findById(String userId) {
-            // نرجع User وهمي بناءً على userId
+
             return new User(userId, "TestUser", userId + "@example.com", "pass");
         }
     }

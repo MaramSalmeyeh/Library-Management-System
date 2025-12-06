@@ -23,13 +23,13 @@ class FineServiceTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        // ملفات DB الأساسية
+
         Files.write(tempDir.resolve("admins.txt"), List.of());
         Files.write(tempDir.resolve("librarians.txt"), List.of());
         Files.write(tempDir.resolve("books.txt"), List.of());
         Files.write(tempDir.resolve("loans.txt"), List.of());
 
-        // نبدأ بدون غرامات
+
         Files.write(tempDir.resolve("fines.txt.txt"), List.of());
 
         storage = new FileStorage(tempDir.toString());
@@ -57,11 +57,11 @@ class FineServiceTest {
 
     @Test
     void getUserOutstandingBalance_sumsOnlyUnpaidFinesForUser() {
-        // U1: غرامتين
+
         fineService.createFine("U1", 30.0);
         fineService.createFine("U1", 10.0);
 
-        // U2: غرامة
+
         fineService.createFine("U2", 50.0);
 
         double u1Balance = fineService.getUserOutstandingBalance("U1");
@@ -73,22 +73,21 @@ class FineServiceTest {
 
     @Test
     void payFine_partialPayment_reducesBalanceButLeavesSomeUnpaid() {
-        // U1: 30 + 10 = 40
+
         fineService.createFine("U1", 30.0);
         fineService.createFine("U1", 10.0);
 
         double newBalance = fineService.payFine("U1", 25.0);
 
-        // الرصيد الجديد: 15
+
         assertEquals(15.0, newBalance, 0.0001);
 
-        // نتأكد من حالة الغرامات
+
         List<Fine> fines = storage.loadFines();
-        // لازم يكونوا نفس العدد
+
         assertEquals(2, fines.size());
 
-        // وحدة جزئياً مدفوعة، والثانية كاملة لسه
-        // الترتيب: أول غرامة 5، ثانية 10
+
         assertEquals(5.0, fines.get(0).getAmount(), 0.0001);
         assertFalse(fines.get(0).isPaid());
 

@@ -29,7 +29,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        // نجهز ملفات DB فاضية
+
         Files.write(tempDir.resolve("admins.txt"), Collections.emptyList());
         Files.write(tempDir.resolve("librarians.txt"), Collections.emptyList());
         Files.write(tempDir.resolve("books.txt"), Collections.emptyList());
@@ -58,7 +58,7 @@ class UserServiceTest {
 
     @Test
     void register_withDuplicateEmail_throwsException() {
-        // موجود مستخدم بنفس الايميل
+
         storage.saveUsers(List.of(
                 new User("U1", "Old User", "aseel@example.com", "oldpwd")
         ));

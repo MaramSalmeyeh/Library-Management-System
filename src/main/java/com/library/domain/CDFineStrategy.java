@@ -1,8 +1,6 @@
 package com.library.domain;
 
-/**
- * غرامة الـ CD: 20 NIS للمادة المتأخرة.
- */
+
 public class CDFineStrategy implements FineStrategy {
 
     @Override

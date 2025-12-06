@@ -116,7 +116,7 @@ public class FileStorage {
         List<User> users = new ArrayList<>();
         try {
             if (!Files.exists(usersFile())) {
-                return users; // لا يوجد ملف → برجع ليست فاضية
+                return users;
             }
             for (String line : Files.readAllLines(usersFile())) {
                 if (line.isBlank()) continue;
@@ -213,7 +213,7 @@ public class FileStorage {
             for (String line : Files.readAllLines(loansFile())) {
                 if (line.isBlank()) continue;
 
-                // مهم: -1 عشان ما يحذف الحقول الفاضية بالأخير
+
                 String[] parts = line.split(";", -1);
                 if (parts.length < 6) continue;
 
@@ -224,7 +224,7 @@ public class FileStorage {
                 LocalDate dueDate = LocalDate.parse(parts[4]);
                 LocalDate returnDate = parts[5].isEmpty() ? null : LocalDate.parse(parts[5]);
 
-                // NEW: mediaType (للأسطر القديمة ما في هذا الحقل → نعتبرها BOOK)
+
                 MediaType mediaType = MediaType.BOOK;
                 if (parts.length >= 7 && !parts[6].isBlank()) {
                     mediaType = MediaType.valueOf(parts[6]);

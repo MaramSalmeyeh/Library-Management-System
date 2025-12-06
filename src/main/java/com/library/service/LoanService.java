@@ -131,17 +131,17 @@ public class LoanService {
 
         for (Loan loan : loans) {
 
-            // إعارة لنفس المستخدم
+
             if (!loan.getUserId().equals(userId)) {
                 continue;
             }
 
-            // لو رجّع الكتاب، لا تعتبر متأخرة
+
             if (loan.getReturnDate() != null) {
                 continue;
             }
 
-            // إذا تاريخ الاستحقاق قبل اليوم → متأخر
+
             if (loan.getDueDate().isBefore(today)) {
                 return true;
             }
@@ -149,10 +149,7 @@ public class LoanService {
 
         return false;
     }
-    /**
-     * Sprint 4 – يساعد US4.2:
-     * يفحص إذا كان لدى المستخدم أي إعارات فعّالة (لم تُرجع بعد).
-     */
+
     public boolean hasActiveLoans(String userId) {
         List<Loan> loans = storage.loadLoans();
 
@@ -160,22 +157,19 @@ public class LoanService {
             if (!loan.getUserId().equals(userId)) {
                 continue;
             }
-            // loan فعّال إذا ما رجّع الكتاب
+
             if (!loan.isReturned()) {
                 return true;
             }
         }
 
-        return false; // ما في ولا إعارة فعّالة
+        return false;
     }
 
-    /**
-     * استعارة CD لمدة 7 أيام.
-     * US5.1 Borrow CD
-     */
+
     public Loan borrowCd(String userId, String cdId) {
 
-        // ما في عندنا حالياً جدول CDs، فبننشئ Loan مباشرة
+
         List<Loan> loans = storage.loadLoans();
         String loanId = "L" + (loans.size() + 1);
 
@@ -189,7 +183,7 @@ public class LoanService {
                 borrowDate,
                 dueDate,
                 null,
-                MediaType.CD        // ← أهم سطر: نوع الوسيط CD
+                MediaType.CD
         );
 
         loans.add(loan);

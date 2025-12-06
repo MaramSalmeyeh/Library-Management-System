@@ -1,10 +1,6 @@
 package com.library.domain;
 
-/**
- * غرامة الكتاب: 10 NIS للمادة المتأخرة
- * (نحسبها كغرامة ثابتة per item وليس لكل يوم.
- * لو الدكتور بده per-day، نغير المعادلة بسهولة).
- */
+
 public class BookFineStrategy implements FineStrategy {
 
     @Override

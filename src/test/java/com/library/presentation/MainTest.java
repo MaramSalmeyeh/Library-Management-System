@@ -18,8 +18,7 @@ class MainTest {
 
     @Test
     void testMainCreatesRequiredServices() {
-        // This test verifies that Main can be instantiated
-        // and its dependencies are properly structured
+
         assertDoesNotThrow(() -> {
             Main main = new Main();
             assertNotNull(main);
@@ -41,7 +40,7 @@ class MainTest {
             assertTrue(email == null || email.length() > 0);
             assertTrue(password == null || password.length() > 0);
         } catch (Exception e) {
-            // .env file might not exist in test environment, which is acceptable
+
             assertTrue(true);
         }
     }

@@ -23,12 +23,12 @@ class BookServiceTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        // نجهّز ملفات admins/books (حتى لو الأدمن مش مهم هنا)
+
         Path adminsFile = tempDir.resolve("admins.txt");
-        Files.write(adminsFile, List.of()); // فاضي
+        Files.write(adminsFile, List.of());
 
         Path booksFile = tempDir.resolve("books.txt");
-        Files.write(booksFile, List.of());  // نبدأ بدون كتب
+        Files.write(booksFile, List.of());
 
         storage = new FileStorage(tempDir.toString());
         bookService = new BookService(storage);
@@ -43,7 +43,7 @@ class BookServiceTest {
         assertEquals("Rowling", book.getAuthor());
         assertEquals("111", book.getIsbn());
 
-        // نتأكد أنه انكتب في الملف
+
         List<String> lines = Files.readAllLines(tempDir.resolve("books.txt"));
         assertEquals(1, lines.size());
         assertTrue(lines.get(0).contains("Harry Potter"));
@@ -51,15 +51,15 @@ class BookServiceTest {
 
     @Test
     void addBook_withDuplicateIsbn_returnsNullAndDoesNotAdd() throws IOException {
-        // أول كتاب
+
         Book first = bookService.addBook("Book1", "Author1", "123");
         assertNotNull(first);
 
-        // نفس الـ ISBN
+
         Book second = bookService.addBook("Book2", "Author2", "123");
         assertNull(second, "Second book with same ISBN should not be added");
 
-        // الملف لازم فيه كتاب واحد بس
+
         List<String> lines = Files.readAllLines(tempDir.resolve("books.txt"));
         assertEquals(1, lines.size());
     }

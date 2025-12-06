@@ -26,15 +26,14 @@ public class Main {
 
         EmailService emailService = new EmailService(email, appPassword);
 
-        // لازم يكون عندك ReminderService(LoanService, UserService, EmailService)
+
         ReminderService reminderService = new ReminderService(
                 loanService,
                 userService,
                 emailService
         );
 
-        // ConsoleMenu لازم يكون كونستركتوره:
-        // (AuthService, UserService, BookService, LoanService, FineService, BorrowingService, ReminderService)
+
         ConsoleMenu menu = new ConsoleMenu(
                 authService,
                 userService,

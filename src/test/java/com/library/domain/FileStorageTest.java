@@ -56,7 +56,7 @@ class FileStorageTest {
 
     @Test
     void loadLibrarians_readsFromFile() throws IOException {
-        // نكتب ملف librarians.txt يدويًا في المجلد المؤقت
+
         Path librariansFile = tempDir.resolve("librarians.txt");
         Files.writeString(
                 librariansFile,

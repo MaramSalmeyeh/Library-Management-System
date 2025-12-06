@@ -118,7 +118,7 @@ public class ConsoleMenu {
 
 
 
-    // ===== Admin login =====
+
 
     private void handleAdminLogin() {
         if (authService.isAdminLoggedIn()) {
@@ -141,7 +141,7 @@ public class ConsoleMenu {
         }
     }
 
-    // ===== Librarian login =====
+
 
     private void handleLibrarianLogin() {
         if (authService.isLibrarianLoggedIn()) {
@@ -164,7 +164,7 @@ public class ConsoleMenu {
         }
     }
 
-    // ===== Logout =====
+
 
     private void handleLogout() {
         if (!authService.isAdminLoggedIn() && !authService.isLibrarianLoggedIn()) {
@@ -219,7 +219,7 @@ public class ConsoleMenu {
     }
 
 
-    // ===== Add book (admin only, Sprint 1) =====
+
 
     private void handleAddBook() {
         if (!authService.isAdminLoggedIn()) {
@@ -244,7 +244,7 @@ public class ConsoleMenu {
         }
     }
 
-    // ===== Search book (Sprint 1) =====
+
 
     private void handleSearchBook() {
         System.out.println("\nSearch by:");
@@ -297,11 +297,7 @@ public class ConsoleMenu {
                 + " | Borrowed: " + (b.isBorrowed() ? "Yes" : "No"));
     }
 
-    // ===== Borrow book (user) – Sprint 2: US2.1 =====
 
-    // ===== Borrow book (user) – Sprint 2: US2.1 + Rule from US2.3 =====
-
-    // ===== Borrow item (book / CD) – Sprint 2 + Sprint 5 =====
     private void handleBorrowBook() {
         System.out.println("\n=== Borrow Item (Book / CD) ===");
 
@@ -352,7 +348,7 @@ public class ConsoleMenu {
 
 
 
-    // ===== View overdue loans (librarian only) – Sprint 2: US2.2 =====
+
 
     private void handleViewOverdueLoans() {
         if (!authService.isLibrarianLoggedIn()) {
@@ -411,7 +407,7 @@ public class ConsoleMenu {
         System.out.println("Payment processed. Remaining balance = " + newBalance + " NIS");
 
         if (newBalance == 0) {
-            System.out.println("All fines.txt are fully paid. You have regained borrowing rights.");
+            System.out.println("All fines are fully paid. You have regained borrowing rights.");
         }
     }
 
@@ -458,7 +454,7 @@ public class ConsoleMenu {
         }
     }
 
-    // ===== Unregister user (admin only) – Sprint 4: US4.2 =====
+
 
     private void handleUnregisterUser() {
         System.out.println("\n=== Unregister User ===");

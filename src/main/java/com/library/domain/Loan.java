@@ -7,19 +7,19 @@ public class Loan {
 
     private final String id;
     private final String userId;
-    private final String bookId;       // ممكن نسميه itemId لكن نتركه هيك عشان ما نكسّر الكود
+    private final String bookId;
     private final LocalDate borrowDate;
     private final LocalDate dueDate;
     private LocalDate returnDate;
     private final MediaType mediaType; // NEW
 
-    // ✅ constructor القديم المتوافق مع الكود والملفات القديمة
+
     public Loan(String id, String userId, String bookId,
                 LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate) {
         this(id, userId, bookId, borrowDate, dueDate, returnDate, MediaType.BOOK);
     }
 
-    // ✅ constructor الجديد مع نوع الوسيط (BOOK / CD)
+
     public Loan(String id, String userId, String bookId,
                 LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate,
                 MediaType mediaType) {

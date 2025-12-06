@@ -13,17 +13,12 @@ public class FineService {
     private final FileStorage storage;
     private final FineCalculator fineCalculator;
 
-    /**
-     * Default constructor: uses a default FineCalculator with standard strategies
-     * for each media type (e.g. BOOK=10, CD=20).
-     */
+
     public FineService(FileStorage storage) {
         this(storage, new FineCalculator());
     }
 
-    /**
-     * Constructor that allows injecting a custom FineCalculator (useful for tests).
-     */
+
     public FineService(FileStorage storage, FineCalculator fineCalculator) {
         this.storage = storage;
         this.fineCalculator = fineCalculator;
@@ -42,21 +37,18 @@ public class FineService {
 
     public double getUserOutstandingBalance(String userId) {
         double total = 0.0;
-        System.out.println("DEBUG - FineService.getUserOutstandingBalance for userId = [" + userId + "]");
+
 
         for (Fine f : storage.loadFines()) {
-            System.out.println("DEBUG - checking fine: id=" + f.getId()
-                    + ", userId=[" + f.getUserId() + "]"
-                    + ", amount=" + f.getAmount()
-                    + ", paid=" + f.isPaid());
 
-            // نستخدم trim() عشان لو في مسافات زيادة في الملف
+
+
             if (f.getUserId().trim().equals(userId.trim()) && !f.isPaid()) {
                 total += f.getAmount();
             }
         }
 
-        System.out.println("DEBUG - total outstanding = " + total);
+
         return total;
     }
 
@@ -70,14 +62,7 @@ public class FineService {
         return fine;
     }
 
-    /**
-     * Creates a fine for an overdue item using the Strategy Pattern.
-     *
-     * @param userId      id of the user who owns the item
-     * @param mediaType   BOOK or CD
-     * @param overdueDays number of overdue days (positive value means overdue)
-     * @return the created Fine, or null if no fine is due (overdueDays <= 0 or amount == 0)
-     */
+
     public Fine createFineForOverdue(String userId, MediaType mediaType, long overdueDays) {
         double amount = fineCalculator.calculate(mediaType, overdueDays);
         if (amount <= 0.0) {

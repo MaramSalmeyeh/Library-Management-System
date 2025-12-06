@@ -19,7 +19,7 @@ public class AuthService {
         this.storage = storage;
     }
 
-    // ===================== ADMIN LOGIN =====================
+
 
     public Admin login(String email, String password) {
         List<Admin> admins = storage.loadAdmins();
@@ -44,7 +44,7 @@ public class AuthService {
         return currentAdmin;
     }
 
-    // ===================== LIBRARIAN LOGIN =====================
+
 
     public Librarian loginLibrarian(String email, String password) {
         List<Librarian> librarians = storage.loadLibrarians();
@@ -69,7 +69,7 @@ public class AuthService {
         return currentLibrarian;
     }
 
-    // ===================== USER LOGIN (NEW) =====================
+
 
     public User loginUser(String email, String password) {
         List<User> users = storage.loadUsers();
@@ -94,7 +94,7 @@ public class AuthService {
         return currentUser;
     }
 
-    // ===================== LOGOUT =====================
+
 
     public void logout() {
         currentAdmin = null;

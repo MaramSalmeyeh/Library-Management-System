@@ -13,30 +13,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Comprehensive tests for ConsoleMenu with increased coverage.
- *
- * Coverage Areas:
- * - Admin login (success, failure, double login prevention, logout)
- * - User management (signup, login, duplicate prevention, credentials validation)
- * - Book management (add, search by title/author/ISBN, duplicate prevention, authorization)
- * - Borrowing functionality (book borrowing, validation, error handling, double borrow prevention)
- * - Fine payment (full/partial payment, validation, no fines scenario)
- * - User unregistration (authorization, success/error cases)
- * - Menu navigation and display
- * - Guard clauses for all role-specific operations
- * - Error handling for invalid inputs
- *
- * Total: 43 test cases covering all major functionality and edge cases
- */
+
 public class ConsoleMenuTest {
 
     @TempDir
     Path tempDir;
 
-    /**
-     * Helper to run the menu with scripted input and capture output.
-     */
+
     private String runMenuWithInput(String inputScript, FileStorage storage,
                                     java.util.function.Consumer<ConsoleMenu> setup) throws IOException {
         InputStream originalIn = System.in;
@@ -81,7 +64,7 @@ public class ConsoleMenuTest {
         }
     }
 
-    // ===== Existing Tests =====
+
 
     @Test
     void userSignUpAndLogin_flowPrintsExpectedMessages_andPersistsUser() throws IOException {
@@ -224,7 +207,7 @@ public class ConsoleMenuTest {
         assertTrue(output.contains("You must login as admin to send overdue reminders."));
     }
 
-    // ===== NEW TESTS FOR INCREASED COVERAGE =====
+
 
     @Test
     void adminLogin_failsWithInvalidCredentials() throws IOException {
