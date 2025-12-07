@@ -13,13 +13,56 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link AuthService} class.
+ *
+ * <p>This test suite verifies authentication logic for admins,
+ * librarians, and users. All authentication scenarios are validated,
+ * including:</p>
+ *
+ * <ul>
+ *     <li>Successful admin login.</li>
+ *     <li>Failed login due to incorrect password.</li>
+ *     <li>Unknown email handling.</li>
+ *     <li>Correct logout behavior.</li>
+ *     <li>Librarian login and role switching.</li>
+ *     <li>User login and ensuring only one role is active at a time.</li>
+ * </ul>
+ *
+ * <p>Each test uses a {@code @TempDir} temporary folder to isolate
+ * file storage and ensure no real application data is touched.</p>
+ *
+ * @author Maram
+ * @version 1.0
+ */
 class AuthServiceTest {
 
+    /**
+     * Temporary directory automatically created by JUnit
+     * to hold the dynamically generated authentication files.
+     */
     @TempDir
     Path tempDir;
 
+    /**
+     * The service under test. Created fresh before each test.
+     */
     private AuthService authService;
 
+    /**
+     * Prepares the test environment by creating mock data files for:
+     * <ul>
+     *     <li>Admins</li>
+     *     <li>Librarians</li>
+     *     <li>Users</li>
+     * </ul>
+     *
+     * <p>The method writes realistic authentication lines to the files,
+     * then initializes a new {@link AuthService} instance using the
+     * temporary storage directory.</p>
+     *
+     * @throws IOException if file writing fails
+     */
     @BeforeEach
     void setUp() throws IOException {
 
@@ -42,12 +85,14 @@ class AuthServiceTest {
         );
         Files.write(usersFile, userLines);
 
-
         FileStorage storage = new FileStorage(tempDir.toString());
-
         authService = new AuthService(storage);
     }
 
+    /**
+     * Verifies that a valid admin email and password
+     * successfully authenticate an administrator and mark them as logged in.
+     */
     @Test
     void login_withValidCredentials_returnsAdminAndMarksLoggedIn() {
         Admin admin = authService.login("admin@example.com", "1234");
@@ -57,6 +102,10 @@ class AuthServiceTest {
         assertTrue(authService.isAdminLoggedIn(), "Admin should be marked as logged in");
     }
 
+    /**
+     * Ensures incorrect passwords result in failed login
+     * and no admin session is created.
+     */
     @Test
     void login_withInvalidPassword_returnsNullAndNotLoggedIn() {
         Admin admin = authService.login("admin@example.com", "wrong");
@@ -65,6 +114,9 @@ class AuthServiceTest {
         assertFalse(authService.isAdminLoggedIn(), "No admin should be logged in");
     }
 
+    /**
+     * Ensures that unknown emails do not match any admin record.
+     */
     @Test
     void login_withUnknownEmail_returnsNull() {
         Admin admin = authService.login("unknown@example.com", "1234");
@@ -73,18 +125,27 @@ class AuthServiceTest {
         assertFalse(authService.isAdminLoggedIn());
     }
 
+    /**
+     * Verifies that logging out clears the current logged-in admin.
+     */
     @Test
     void logout_clearsCurrentAdmin() {
-
         authService.login("admin@example.com", "1234");
         assertTrue(authService.isAdminLoggedIn());
-
 
         authService.logout();
 
         assertFalse(authService.isAdminLoggedIn(), "After logout no admin should be logged in");
     }
 
+    /**
+     * Tests librarian login and ensures that logging in as a librarian:
+     * <ul>
+     *     <li>Authenticates correctly</li>
+     *     <li>Sets librarian as current role</li>
+     *     <li>Clears admin and user login states</li>
+     * </ul>
+     */
     @Test
     void librarianLogin_setsCurrentLibrarianAndClearsOthers() {
         assertNull(authService.getCurrentLibrarian());
@@ -98,6 +159,11 @@ class AuthServiceTest {
         assertFalse(authService.isUserLoggedIn());
     }
 
+    /**
+     * Ensures correct login for a normal system user,
+     * and verifies that logging in as a user resets
+     * admin and librarian sessions.
+     */
     @Test
     void userLogin_setsCurrentUserAndResetsOtherRoles() {
         var user = authService.loginUser("user@example.com", "userpwd");
@@ -105,7 +171,6 @@ class AuthServiceTest {
         assertNotNull(user);
         assertEquals("User One", user.getName());
 
-        // log in as admin then ensure user login clears it
         authService.login("admin@example.com", "1234");
         assertTrue(authService.isAdminLoggedIn());
 

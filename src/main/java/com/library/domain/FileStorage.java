@@ -6,44 +6,91 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles all file-based persistence for the library system.
+ * <p>
+ * The FileStorage class is responsible for loading and saving all library data
+ * including admins, librarians, users, books, loans, and fines.
+ * Data is stored in plain text files inside a base directory.
+ * </p>
+ *
+ * <p>Each record is stored using semicolon-separated format.</p>
+ *
+ * @author Maram
+ * @version 1.0
+ */
 public class FileStorage {
 
+    /**
+     * The base directory where all data files are stored.
+     */
     private final Path baseDir;
 
+    /**
+     * Creates a new FileStorage instance.
+     *
+     * @param baseDirName the directory where the text files will be stored
+     */
     public FileStorage(String baseDirName) {
         this.baseDir = Paths.get(baseDirName);
     }
 
+    /* ============================
+       Private helper file path methods
+       ============================ */
 
-
-
+    /**
+     * @return path to admins.txt file
+     */
     private Path adminsFile() {
         return baseDir.resolve("admins.txt");
     }
 
+    /**
+     * @return path to librarians.txt file
+     */
     private Path librariansFile() {
         return baseDir.resolve("librarians.txt");
     }
 
+    /**
+     * @return path to users.txt file
+     */
     private Path usersFile() {
         return baseDir.resolve("users.txt");
     }
 
-
+    /**
+     * @return path to books.txt file
+     */
     private Path booksFile() {
         return baseDir.resolve("books.txt");
     }
 
+    /**
+     * @return path to loans.txt file
+     */
     private Path loansFile() {
         return baseDir.resolve("loans.txt");
     }
 
+    /**
+     * @return path to fines.txt file
+     */
     private Path finesFile() {
         return baseDir.resolve("fines.txt");
     }
 
 
+    /* ============================
+       Admins
+       ============================ */
 
+    /**
+     * Loads all admins from admins.txt.
+     *
+     * @return list of Admin objects
+     */
     public List<Admin> loadAdmins() {
         List<Admin> admins = new ArrayList<>();
         try {
@@ -66,6 +113,11 @@ public class FileStorage {
         return admins;
     }
 
+    /**
+     * Saves a list of admins to admins.txt.
+     *
+     * @param admins the admin list to save
+     */
     public void saveAdmins(List<Admin> admins) {
         List<String> lines = new ArrayList<>();
         for (Admin a : admins) {
@@ -88,7 +140,15 @@ public class FileStorage {
     }
 
 
+    /* ============================
+       Librarians
+       ============================ */
 
+    /**
+     * Loads all librarians from librarians.txt.
+     *
+     * @return list of Librarian objects
+     */
     public List<Librarian> loadLibrarians() {
         List<Librarian> librarians = new ArrayList<>();
         try {
@@ -112,6 +172,15 @@ public class FileStorage {
     }
 
 
+    /* ============================
+       Users
+       ============================ */
+
+    /**
+     * Loads all users from users.txt.
+     *
+     * @return list of User objects
+     */
     public List<User> loadUsers() {
         List<User> users = new ArrayList<>();
         try {
@@ -136,6 +205,11 @@ public class FileStorage {
         return users;
     }
 
+    /**
+     * Saves all users to users.txt.
+     *
+     * @param users list of users to save
+     */
     public void saveUsers(List<User> users) {
         List<String> lines = new ArrayList<>();
         for (User u : users) {
@@ -158,6 +232,15 @@ public class FileStorage {
     }
 
 
+    /* ============================
+       Books
+       ============================ */
+
+    /**
+     * Loads all books from books.txt.
+     *
+     * @return list of Book objects
+     */
     public List<Book> loadBooks() {
         List<Book> books = new ArrayList<>();
         try {
@@ -181,6 +264,11 @@ public class FileStorage {
         return books;
     }
 
+    /**
+     * Saves all books to books.txt.
+     *
+     * @param books list of books to save
+     */
     public void saveBooks(List<Book> books) {
         List<String> lines = new ArrayList<>();
         for (Book b : books) {
@@ -204,6 +292,15 @@ public class FileStorage {
     }
 
 
+    /* ============================
+       Loans
+       ============================ */
+
+    /**
+     * Loads all loans from loans.txt.
+     *
+     * @return list of Loan objects
+     */
     public List<Loan> loadLoans() {
         List<Loan> loans = new ArrayList<>();
         try {
@@ -212,7 +309,6 @@ public class FileStorage {
             }
             for (String line : Files.readAllLines(loansFile())) {
                 if (line.isBlank()) continue;
-
 
                 String[] parts = line.split(";", -1);
                 if (parts.length < 6) continue;
@@ -223,7 +319,6 @@ public class FileStorage {
                 LocalDate borrowDate = LocalDate.parse(parts[3]);
                 LocalDate dueDate = LocalDate.parse(parts[4]);
                 LocalDate returnDate = parts[5].isEmpty() ? null : LocalDate.parse(parts[5]);
-
 
                 MediaType mediaType = MediaType.BOOK;
                 if (parts.length >= 7 && !parts[6].isBlank()) {
@@ -238,8 +333,11 @@ public class FileStorage {
         return loans;
     }
 
-
-
+    /**
+     * Saves all loans to loans.txt.
+     *
+     * @param loans list of Loan objects to save
+     */
     public void saveLoans(List<Loan> loans) {
         List<String> lines = new ArrayList<>();
         for (Loan loan : loans) {
@@ -254,7 +352,7 @@ public class FileStorage {
                     loan.getBorrowDate().toString(),
                     loan.getDueDate().toString(),
                     returnDateStr,
-                    loan.getMediaType().name()   // NEW
+                    loan.getMediaType().name()
             );
             lines.add(line);
         }
@@ -269,7 +367,15 @@ public class FileStorage {
     }
 
 
+    /* ============================
+       Fines
+       ============================ */
 
+    /**
+     * Loads all fines from fines.txt.
+     *
+     * @return list of Fine objects
+     */
     public List<Fine> loadFines() {
         List<Fine> fines = new ArrayList<>();
         try {
@@ -294,6 +400,11 @@ public class FileStorage {
         return fines;
     }
 
+    /**
+     * Saves all fines to fines.txt.
+     *
+     * @param fines list of fines to save
+     */
     public void saveFines(List<Fine> fines) {
         List<String> lines = new ArrayList<>();
         for (Fine fine : fines) {
@@ -315,6 +426,11 @@ public class FileStorage {
         }
     }
 
+    /**
+     * Saves librarians list (currently empty implementation).
+     *
+     * @param librarians list of librarians
+     */
     public void saveLibrarians(List<Librarian> librarians) {
 
     }

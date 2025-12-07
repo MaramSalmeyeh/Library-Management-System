@@ -17,8 +17,22 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for {@link UserService}.
+ *
+ * <p>This test class verifies all core functionalities of user management, including:
+ * registration, login, and the unregistering workflow that checks active loans
+ * and outstanding fines before allowing removal.</p>
+ *
+ * <p>All tests run using a temporary file-based database to ensure isolation
+ * and consistent behavior.</p>
+ *
+ * @author Asil
+ * @version 1.0
+ */
 class UserServiceTest {
 
+    /** Temporary directory that stores isolated test data for each test execution. */
     @TempDir
     Path tempDir;
 
@@ -27,9 +41,16 @@ class UserServiceTest {
     private LoanService loanService;
     private FineService fineService;
 
+    /**
+     * Initializes a clean test environment before each test.
+     *
+     * <p>All required storage files are created empty in a temporary directory.
+     * Service instances are initialized using this isolated storage.</p>
+     *
+     * @throws IOException if writing to the temporary directory fails
+     */
     @BeforeEach
     void setUp() throws IOException {
-
         Files.write(tempDir.resolve("admins.txt"), Collections.emptyList());
         Files.write(tempDir.resolve("librarians.txt"), Collections.emptyList());
         Files.write(tempDir.resolve("books.txt"), Collections.emptyList());
@@ -43,6 +64,10 @@ class UserServiceTest {
         userService = new UserService(storage);
     }
 
+    /**
+     * Tests that the {@link UserService#register(String, String, String)} method
+     * correctly creates a new user and persists it to file storage.
+     */
     @Test
     void register_createsNewUserAndPersistsToFile() {
         User u = userService.register("Aseel", "aseel@example.com", "pwd");
@@ -56,9 +81,12 @@ class UserServiceTest {
         assertEquals("aseel@example.com", fromFile.get(0).getEmail());
     }
 
+    /**
+     * Ensures that registering a user with an email that already exists
+     * results in an {@link IllegalArgumentException}.
+     */
     @Test
     void register_withDuplicateEmail_throwsException() {
-
         storage.saveUsers(List.of(
                 new User("U1", "Old User", "aseel@example.com", "oldpwd")
         ));
@@ -67,6 +95,16 @@ class UserServiceTest {
                 () -> userService.register("Aseel", "aseel@example.com", "pwd"));
     }
 
+    /**
+     * Tests both successful and failed login attempts.
+     *
+     * <p>Verifies correct handling of:</p>
+     * <ul>
+     *   <li>Valid credentials</li>
+     *   <li>Incorrect password</li>
+     *   <li>Unknown email</li>
+     * </ul>
+     */
     @Test
     void login_returnsUserOnCorrectCredentials_elseNull() {
         storage.saveUsers(List.of(
@@ -84,6 +122,10 @@ class UserServiceTest {
         assertNull(unknown);
     }
 
+    /**
+     * Tests that a user with no active loans and no unpaid fines
+     * is successfully removed from storage.
+     */
     @Test
     void unregisterUser_whenNoLoansAndNoFines_removesUserFromFile() {
         storage.saveUsers(List.of(
@@ -98,6 +140,10 @@ class UserServiceTest {
         assertTrue(remaining.isEmpty(), "User should be removed from users.txt");
     }
 
+    /**
+     * Ensures that unregistering a user with an active loan throws an exception
+     * and does not remove the user.
+     */
     @Test
     void unregisterUser_whenUserHasActiveLoans_throwsIllegalState() {
         storage.saveUsers(List.of(
@@ -109,7 +155,7 @@ class UserServiceTest {
                 new Loan("L1", "U1", "B1",
                         today.minusDays(1),
                         today.plusDays(7),
-                        null) // active loan
+                        null)
         ));
 
         storage.saveFines(Collections.emptyList());
@@ -117,10 +163,13 @@ class UserServiceTest {
         assertThrows(IllegalStateException.class,
                 () -> userService.unregisterUser("U1", loanService, fineService));
 
-        // لسه موجود
         assertEquals(1, storage.loadUsers().size());
     }
 
+    /**
+     * Ensures that unregistering a user with unpaid fines is not allowed
+     * and results in an exception.
+     */
     @Test
     void unregisterUser_whenUserHasUnpaidFines_throwsIllegalState() {
         storage.saveUsers(List.of(
@@ -138,6 +187,10 @@ class UserServiceTest {
         assertEquals(1, storage.loadUsers().size());
     }
 
+    /**
+     * Tests that attempting to unregister a non-existent user
+     * results in an {@link IllegalArgumentException}.
+     */
     @Test
     void unregisterUser_whenUserDoesNotExist_throwsIllegalArgument() {
         storage.saveUsers(Collections.emptyList());

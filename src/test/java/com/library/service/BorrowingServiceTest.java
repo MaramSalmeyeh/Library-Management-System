@@ -14,11 +14,25 @@ import java.util.ArrayList;
 import java.util.List;
 import com.library.domain.MediaType;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link BorrowingService} class.
+ *
+ * <p>This test suite verifies borrowing logic, ensuring that the system
+ * correctly enforces rules regarding overdue loans, unpaid fines, and
+ * allowed media types. All tests operate in an isolated temporary
+ * directory using file-based storage through {@link FileStorage}.</p>
+ *
+ * <p>Each test initializes a clean environment to guarantee deterministic
+ * results without affecting actual system data.</p>
+ *
+ * @author Maram
+ * @version 1.0
+ */
 class BorrowingServiceTest {
 
+    /** Temporary directory for storing mock DB files during tests. */
     @TempDir
     Path tempDir;
 
@@ -27,10 +41,15 @@ class BorrowingServiceTest {
     private FineService fineService;
     private BorrowingService borrowingService;
 
-
     private static final String USER_ID = "U1";
     private static final String BOOK_ID = "B1";
 
+    /**
+     * Prepares the test environment by creating empty storage files
+     * and initializing all required services using a temporary directory.
+     *
+     * @throws IOException if any of the mock DB files cannot be created
+     */
     @BeforeEach
     void setUp() throws IOException {
 
@@ -39,7 +58,6 @@ class BorrowingServiceTest {
         Files.write(tempDir.resolve("users.txt"), List.of());
         Files.write(tempDir.resolve("loans.txt"), List.of());
         Files.write(tempDir.resolve("fines.txt"), List.of());
-
 
         Files.write(
                 tempDir.resolve("books.txt"),
@@ -52,7 +70,11 @@ class BorrowingServiceTest {
         borrowingService = new BorrowingService(loanService, fineService);
     }
 
-
+    /**
+     * Ensures that a user with no overdue loans and no unpaid fines
+     * can borrow a book successfully. A new {@link Loan} record
+     * should be created and stored.
+     */
     @Test
     void borrowBook_whenUserIsClean_createsLoan() {
         Loan loan = borrowingService.borrowBook(USER_ID, BOOK_ID);
@@ -61,13 +83,16 @@ class BorrowingServiceTest {
         assertEquals(USER_ID, loan.getUserId());
         assertEquals(BOOK_ID, loan.getBookId());
 
-
         List<Loan> loans = storage.loadLoans();
         assertEquals(1, loans.size());
         assertEquals(USER_ID, loans.get(0).getUserId());
     }
 
-
+    /**
+     * Verifies that the borrowing operation is blocked when the user
+     * has at least one overdue loan. The service must throw
+     * {@link IllegalStateException} with a descriptive message.
+     */
     @Test
     void borrowBook_whenUserHasOverdueLoans_throwsException() {
         LocalDate today = LocalDate.now();
@@ -92,10 +117,12 @@ class BorrowingServiceTest {
                 "Message should mention overdue loans");
     }
 
-
+    /**
+     * Ensures that borrowing is blocked when the user has unpaid fines.
+     * A descriptive {@link IllegalStateException} must be thrown.
+     */
     @Test
     void borrowBook_whenUserHasUnpaidFines_throwsException() {
-
         fineService.createFine(USER_ID, 20.0);
 
         IllegalStateException ex = assertThrows(
@@ -107,6 +134,11 @@ class BorrowingServiceTest {
                 "Message should mention unpaid fines");
     }
 
+    /**
+     * Verifies successful borrowing of CD media using
+     * {@link BorrowingService#borrowCd(String, String)}.
+     * The resulting {@link Loan} must have {@link MediaType#CD}.
+     */
     @Test
     void borrowCd_whenUserHasNoFines_succeedsWithCdMediaType() {
 
