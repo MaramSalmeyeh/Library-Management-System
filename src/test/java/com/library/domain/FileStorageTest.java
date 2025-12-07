@@ -151,4 +151,144 @@ class FileStorageTest {
         assertNotNull(users);
         assertTrue(users.isEmpty());
     }
+
+    @Test
+    void loadUsers_emptyFile_returnsEmptyList() throws IOException {
+        Path usersFile = tempDir.resolve("users.txt");
+        Files.writeString(usersFile, "");   // empty file
+
+        FileStorage storage = newStorage();
+        List<User> users = storage.loadUsers();
+
+        assertTrue(users.isEmpty());
+    }
+    @Test
+    void loadUsers_invalidLine_isSkipped() throws IOException {
+        Path usersFile = tempDir.resolve("users.txt");
+        Files.writeString(usersFile, "U1;NameOnly"); // parts.length < 4
+
+        FileStorage storage = newStorage();
+        List<User> users = storage.loadUsers();
+
+        assertTrue(users.isEmpty());
+    }
+
+    @Test
+    void loadAdmins_emptyFile_returnsEmptyList() throws IOException {
+        Path f = tempDir.resolve("admins.txt");
+        Files.writeString(f, "");
+
+        FileStorage storage = newStorage();
+        assertTrue(storage.loadAdmins().isEmpty());
+    }
+
+    @Test
+    void loadAdmins_invalidLine_isSkipped() throws IOException {
+        Path f = tempDir.resolve("admins.txt");
+        Files.writeString(f, "A1;NameOnly");
+
+        FileStorage storage = newStorage();
+        assertTrue(storage.loadAdmins().isEmpty());
+    }
+
+    @Test
+    void loadLibrarians_fileMissing_returnsEmptyList() {
+        FileStorage storage = newStorage();
+        assertTrue(storage.loadLibrarians().isEmpty());
+    }
+
+    @Test
+    void loadBooks_skipsInvalidLine() throws IOException {
+        Path f = tempDir.resolve("books.txt");
+        Files.writeString(f, "B1;Title;Author"); // invalid parts length < 5
+
+        FileStorage storage = newStorage();
+        List<Book> books = storage.loadBooks();
+
+        assertTrue(books.isEmpty());
+    }
+
+    @Test
+    void loadBooks_withBorrowedTrue() throws IOException {
+        Path f = tempDir.resolve("books.txt");
+        Files.writeString(f, "B1;T;A;ISBN;true");
+
+        FileStorage storage = newStorage();
+        List<Book> books = storage.loadBooks();
+
+        assertEquals(1, books.size());
+        assertTrue(books.get(0).isBorrowed());
+    }
+
+    @Test
+    void loadLoans_withReturnDateProvided() throws IOException {
+        Path f = tempDir.resolve("loans.txt");
+        Files.writeString(f,
+                "L1;U1;B1;2024-01-01;2024-01-10;2024-01-20;BOOK");
+
+        FileStorage storage = newStorage();
+        List<Loan> loans = storage.loadLoans();
+
+        assertEquals(1, loans.size());
+        assertEquals(LocalDate.of(2024, 1, 20), loans.get(0).getReturnDate());
+    }
+
+    @Test
+    void loadLoans_mediaTypeMissing_defaultsToBOOK() throws IOException {
+        Path f = tempDir.resolve("loans.txt");
+        Files.writeString(f,
+                "L1;U1;B1;2024-01-01;2024-01-10;");
+
+        FileStorage storage = newStorage();
+        List<Loan> loans = storage.loadLoans();
+
+        assertEquals(1, loans.size());
+        assertEquals(MediaType.BOOK, loans.get(0).getMediaType());
+    }
+
+    @Test
+    void loadLoans_skipsInvalidShortLine() throws IOException {
+        Path f = tempDir.resolve("loans.txt");
+        Files.writeString(f, "L1;U1");   // parts < 6
+
+        FileStorage storage = newStorage();
+        assertTrue(storage.loadLoans().isEmpty());
+    }
+
+    @Test
+    void loadLoans_skipsBlankLines() throws IOException {
+        Path f = tempDir.resolve("loans.txt");
+        Files.writeString(f, "\n\n");
+
+        FileStorage storage = newStorage();
+        assertTrue(storage.loadLoans().isEmpty());
+    }
+
+    @Test
+    void loadFines_skipsInvalidLine() throws IOException {
+        Path f = tempDir.resolve("fines.txt");
+        Files.writeString(f, "F1;U1");  // missing parts
+
+        FileStorage storage = newStorage();
+        assertTrue(storage.loadFines().isEmpty());
+    }
+
+    @Test
+    void loadFines_paidTrue_isParsedCorrectly() throws IOException {
+        Path f = tempDir.resolve("fines.txt");
+        Files.writeString(f, "F1;U1;10.0;true");
+
+        FileStorage storage = newStorage();
+        List<Fine> fines = storage.loadFines();
+
+        assertEquals(1, fines.size());
+        assertTrue(fines.get(0).isPaid());
+    }
+
+
+
+
+
+
+
 }

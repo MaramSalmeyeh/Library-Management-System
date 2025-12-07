@@ -62,4 +62,15 @@ class FineCalculatorTest {
         assertEquals(20.0, calc.calculate(MediaType.CD, 1));
         assertEquals(20.0, calc.calculate(MediaType.CD, 10));
     }
+
+
+
+
+
+
+
+
+
+
+
 }
