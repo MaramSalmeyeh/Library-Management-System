@@ -163,4 +163,5 @@ class FineServiceTest {
         assertEquals(0.0, fines.get(0).getAmount(), 0.0001);
         assertEquals(0.0, fines.get(1).getAmount(), 0.0001);
     }
+
 }
