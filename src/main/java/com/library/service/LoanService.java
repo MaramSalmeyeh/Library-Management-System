@@ -114,7 +114,9 @@ public class LoanService {
                 bookId,
                 borrowDate,
                 dueDate,
-                null
+                null,
+                MediaType.BOOK
+
         );
 
         loans.add(loan);

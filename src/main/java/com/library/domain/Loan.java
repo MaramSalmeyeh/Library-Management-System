@@ -65,9 +65,12 @@ public class Loan {
      * @param dueDate     date the item is due
      * @param returnDate  return date, or {@code null} if not yet returned
      */
-    public Loan(String id, String userId, String bookId,
-                LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate) {
-
+    public Loan(String id,
+                String userId,
+                String bookId,
+                LocalDate borrowDate,
+                LocalDate dueDate,
+                LocalDate returnDate) {
         this(id, userId, bookId, borrowDate, dueDate, returnDate, MediaType.BOOK);
     }
 
@@ -142,6 +145,7 @@ public class Loan {
      */
     public MediaType getMediaType() {
         return mediaType;
+
     }
 
     /**
@@ -171,4 +175,5 @@ public class Loan {
     public boolean isOverdue(LocalDate today) {
         return !isReturned() && today.isAfter(dueDate);
     }
+
 }
