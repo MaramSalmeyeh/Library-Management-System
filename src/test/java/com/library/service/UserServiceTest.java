@@ -200,4 +200,57 @@ class UserServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> userService.unregisterUser("UNKNOWN", loanService, fineService));
     }
+
+
+    @Test
+    void constructor_withEmailService_initializesStorageCorrectly() {
+        EmailService dummyEmail = new EmailService("a","b");
+        UserService us = new UserService(storage, dummyEmail);
+
+        assertNotNull(us);
+    }
+    @Test
+    void isUserLoggedIn_whenNoUserLoggedIn_returnsFalse() {
+        assertFalse(userService.isUserLoggedIn());
+    }
+
+    @Test
+    void logout_clearsCurrentUser() {
+        userService.register("Lana","lana@mail.com","pass");
+        userService.login("lana@mail.com","pass");
+
+        userService.logout();
+
+        assertFalse(userService.isUserLoggedIn());
+    }
+    @Test
+    void findById_whenUserNotFound_returnsNull() {
+        storage.saveUsers(List.of());
+        User found = userService.findById("U999");
+
+        assertNull(found);
+    }
+    @Test
+    void unregisterUser_whenRemovingLoggedInUser_logsOut() {
+        User u = userService.register("Lana","lana@mail.com","pass");
+        userService.login("lana@mail.com","pass");
+
+        storage.saveLoans(List.of());
+        storage.saveFines(List.of());
+
+        userService.unregisterUser("U1", loanService, fineService);
+
+        assertFalse(userService.isUserLoggedIn());
+    }
+    @Test
+    void unregisterUser_whenServicesAreNull_stillRemovesUser() {
+        storage.saveUsers(List.of(
+                new User("U1","User1","u1@mail.com","p")
+        ));
+
+        userService.unregisterUser("U1", null, null);
+
+        assertTrue(storage.loadUsers().isEmpty());
+    }
+
 }

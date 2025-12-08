@@ -1,8 +1,9 @@
-package com.library.service;
+/*package com.library.service;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import com.library.service.EmailService;
-
+*/
+/*
 /**
  * A simple test class used to verify that the {@link EmailService}
  * is working correctly by sending a real email.
@@ -34,6 +35,7 @@ import com.library.service.EmailService;
  * @author Maram
  * @version 1.0
  */
+/*
 public class EmailTestMain {
 
     /**
@@ -41,6 +43,7 @@ public class EmailTestMain {
      *
      * @param args command line arguments (unused)
      */
+/*
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.load();
         String username = dotenv.get("EMAIL_USERNAME");
@@ -55,3 +58,4 @@ public class EmailTestMain {
         emailService.sendEmail(to, subject, body);
     }
 }
+*/

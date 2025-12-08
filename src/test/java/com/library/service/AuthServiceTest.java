@@ -179,4 +179,41 @@ class AuthServiceTest {
         assertFalse(authService.isAdminLoggedIn());
         assertFalse(authService.isLibrarianLoggedIn());
     }
+    @Test
+    void isAdminLoggedIn_whenNoAdminLoggedIn_returnsFalse() {
+        assertFalse(authService.isAdminLoggedIn());
+    }
+    @Test
+    void loginLibrarian_withWrongPassword_returnsNull() {
+        var lib = authService.loginLibrarian("librarian@example.com", "wrong");
+        assertNull(lib);
+        assertFalse(authService.isLibrarianLoggedIn());
+    }
+    @Test
+    void loginLibrarian_withUnknownEmail_returnsNull() {
+        var lib = authService.loginLibrarian("unknown@example.com", "libpwd");
+        assertNull(lib);
+        assertFalse(authService.isLibrarianLoggedIn());
+    }
+    @Test
+    void isLibrarianLoggedIn_whenNoneLoggedIn_returnsFalse() {
+        assertFalse(authService.isLibrarianLoggedIn());
+    }
+    @Test
+    void loginUser_withWrongPassword_returnsNull() {
+        var user = authService.loginUser("user@example.com", "wrong");
+        assertNull(user);
+        assertFalse(authService.isUserLoggedIn());
+    }
+    @Test
+    void loginUser_withUnknownEmail_returnsNull() {
+        var user = authService.loginUser("unknown@example.com", "userpwd");
+        assertNull(user);
+        assertFalse(authService.isUserLoggedIn());
+    }
+    @Test
+    void isUserLoggedIn_whenNoUserLoggedIn_returnsFalse() {
+        assertFalse(authService.isUserLoggedIn());
+    }
+
 }

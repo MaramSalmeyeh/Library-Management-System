@@ -2,9 +2,11 @@ package com.library.service;
 
 import com.library.domain.FileStorage;
 import com.library.domain.Fine;
+import com.library.domain.MediaType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -164,4 +166,55 @@ class FineServiceTest {
         assertEquals(0.0, fines.get(1).getAmount(), 0.0001);
     }
 
+
+
+
+    @Test
+    void createFineForOverdue_zeroAmount_returnsNull() {
+        FineService service = new FineService(storage);
+
+        Fine fine = service.createFineForOverdue("U1", MediaType.BOOK, 0);
+
+        assertNull(fine);
+    }
+
+    @Test
+    void payFine_zeroOrNegativeAmount_returnsCurrentBalance() {
+        fineService.createFine("U1", 20.0);
+
+        double balance = fineService.payFine("U1", 0);
+
+        assertEquals(20.0, balance);
+    }
+    @Test
+    void payFine_skipsOtherUsersAndPaidFines() {
+        fineService.createFine("U1", 30.0);
+        Fine f2 = fineService.createFine("U2", 50.0);
+        Fine f3 = fineService.createFine("U1", 40.0);
+        f3.setPaid(true);
+        storage.saveFines(storage.loadFines());
+
+        double result = fineService.payFine("U1", 10);
+
+        // Only fine 1 should be reduced
+        List<Fine> fines = storage.loadFines();
+        assertEquals(20.0, fines.get(0).getAmount()); // 30 - 10
+        assertEquals(50.0, fines.get(1).getAmount()); // untouched
+        assertEquals(40.0, fines.get(2).getAmount()); // paid → untouched
+    }
+    @Test
+    void getUserFines_returnsOnlyMatchingUserFines() {
+        fineService.createFine("U1", 10.0);
+        fineService.createFine("U2", 20.0);
+        fineService.createFine("U1", 5.0);
+
+        List<Fine> fines = fineService.getUserFines("U1");
+
+        assertEquals(2, fines.size());
+        assertTrue(fines.stream().allMatch(f -> f.getUserId().equals("U1")));
+    }
+
 }
+
+
+

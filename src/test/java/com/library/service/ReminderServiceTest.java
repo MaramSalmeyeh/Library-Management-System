@@ -177,5 +177,33 @@ class ReminderServiceTest {
             return new User(userId, "TestUser", userId + "@example.com", "pass");
         }
     }
+    @Test
+    void sendOverdueReminders_skipsLoansWhenUserNotFound() throws IOException {
+        LocalDate today = LocalDate.now();
+
+
+        List<String> loansLines = List.of(
+                "L1;U99;B1;" +
+                        today.minusDays(40) + ";" +
+                        today.minusDays(5) + ";" +
+                        ""
+        );
+        Files.write(tempDir.resolve("loans.txt"), loansLines);
+
+
+        UserService userService = new UserService(null) {
+            @Override
+            public User findById(String userId) {
+                return null;   // simulate NOT FOUND
+            }
+        };
+
+        reminderService = new ReminderService(loanService, userService, emailService);
+
+        int count = reminderService.sendOverdueReminders();
+
+        assertEquals(0, count, "No reminders should be sent");
+        assertEquals(0, emailService.toList.size(), "Email list must remain empty");
+    }
 
 }

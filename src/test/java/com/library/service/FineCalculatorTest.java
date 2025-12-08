@@ -67,6 +67,26 @@ class FineCalculatorTest {
 
 
 
+    /**
+     * Verifies that the calculator throws an exception
+     * when calculating a fine for an unsupported media type.
+     */
+    @Test
+    void calculate_throwsException_forUnsupportedMediaType() {
+        FineCalculator calc = new FineCalculator();
+
+        // Fake unsupported media type by passing null
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                calc.calculate(null, 5)
+        );
+
+        assertTrue(ex.getMessage().contains("null"));
+    }
+
+
+
+
+
 
 
 

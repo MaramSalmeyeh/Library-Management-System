@@ -150,4 +150,35 @@ class BorrowingServiceTest {
         assertEquals(MediaType.CD, loan.getMediaType());
     }
 
+    @Test
+    void borrowCd_whenUserHasUnpaidFines_throwsException() {
+        fineService.createFine(USER_ID, 30.0); // Fine > 0
+
+        IllegalStateException ex = assertThrows(
+                IllegalStateException.class,
+                () -> borrowingService.borrowCd(USER_ID, "CD1")
+        );
+
+        assertTrue(ex.getMessage().toLowerCase().contains("unpaid"));
+    }
+    @Test
+    void borrowCd_whenUserHasOverdueLoans_throwsException() {
+        LocalDate today = LocalDate.now();
+
+        storage.saveLoans(List.of(
+                new Loan("L1", USER_ID, BOOK_ID,
+                        today.minusDays(30),   // borrow date
+                        today.minusDays(5),    // due date in past = overdue
+                        null)
+        ));
+
+        IllegalStateException ex = assertThrows(
+                IllegalStateException.class,
+                () -> borrowingService.borrowCd(USER_ID, "CD1")
+        );
+
+        assertTrue(ex.getMessage().toLowerCase().contains("overdue"));
+    }
+
+
 }
