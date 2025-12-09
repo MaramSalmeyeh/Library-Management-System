@@ -100,6 +100,19 @@ public class UserService {
     public User register(String name, String email, String password) {
         List<User> users = storage.loadUsers();
 
+        // Email format validation
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            throw new IllegalArgumentException("Email format example: user@example.com");
+        }
+
+        // Password validation
+        if (!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$")) {
+            throw new IllegalArgumentException(
+                    "Password must be at least 8 characters, contain upper & lower case letters, a digit, and a special character"
+            );
+        }
+
+        // Check if email already exists
         boolean exists = users.stream()
                 .anyMatch(u -> u.getEmail().equalsIgnoreCase(email));
         if (exists) {
@@ -113,6 +126,7 @@ public class UserService {
         storage.saveUsers(users);
         return user;
     }
+
 
     /**
      * Attempts to authenticate a user.
