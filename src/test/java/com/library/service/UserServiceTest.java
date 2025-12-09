@@ -41,6 +41,9 @@ class UserServiceTest {
     private LoanService loanService;
     private FineService fineService;
 
+    // Strong password that satisfies the validation rules in UserService.register
+    private static final String VALID_PASSWORD = "Abcd1234!";
+
     /**
      * Initializes a clean test environment before each test.
      *
@@ -70,7 +73,7 @@ class UserServiceTest {
      */
     @Test
     void register_createsNewUserAndPersistsToFile() {
-        User u = userService.register("Aseel", "aseel@example.com", "pwd");
+        User u = userService.register("Aseel", "aseel@example.com", VALID_PASSWORD);
 
         assertNotNull(u);
         assertEquals("U1", u.getId());
@@ -92,7 +95,7 @@ class UserServiceTest {
         ));
 
         assertThrows(IllegalArgumentException.class,
-                () -> userService.register("Aseel", "aseel@example.com", "pwd"));
+                () -> userService.register("Aseel", "aseel@example.com", VALID_PASSWORD));
     }
 
     /**
@@ -201,14 +204,14 @@ class UserServiceTest {
                 () -> userService.unregisterUser("UNKNOWN", loanService, fineService));
     }
 
-
     @Test
     void constructor_withEmailService_initializesStorageCorrectly() {
-        EmailService dummyEmail = new EmailService("a","b");
+        EmailService dummyEmail = new EmailService("a", "b");
         UserService us = new UserService(storage, dummyEmail);
 
         assertNotNull(us);
     }
+
     @Test
     void isUserLoggedIn_whenNoUserLoggedIn_returnsFalse() {
         assertFalse(userService.isUserLoggedIn());
@@ -216,13 +219,14 @@ class UserServiceTest {
 
     @Test
     void logout_clearsCurrentUser() {
-        userService.register("Lana","lana@mail.com","pass");
-        userService.login("lana@mail.com","pass");
+        userService.register("Lana", "lana@mail.com", VALID_PASSWORD);
+        userService.login("lana@mail.com", VALID_PASSWORD);
 
         userService.logout();
 
         assertFalse(userService.isUserLoggedIn());
     }
+
     @Test
     void findById_whenUserNotFound_returnsNull() {
         storage.saveUsers(List.of());
@@ -230,10 +234,11 @@ class UserServiceTest {
 
         assertNull(found);
     }
+
     @Test
     void unregisterUser_whenRemovingLoggedInUser_logsOut() {
-        User u = userService.register("Lana","lana@mail.com","pass");
-        userService.login("lana@mail.com","pass");
+        User u = userService.register("Lana", "lana@mail.com", VALID_PASSWORD);
+        userService.login("lana@mail.com", VALID_PASSWORD);
 
         storage.saveLoans(List.of());
         storage.saveFines(List.of());
@@ -242,10 +247,11 @@ class UserServiceTest {
 
         assertFalse(userService.isUserLoggedIn());
     }
+
     @Test
     void unregisterUser_whenServicesAreNull_stillRemovesUser() {
         storage.saveUsers(List.of(
-                new User("U1","User1","u1@mail.com","p")
+                new User("U1", "User1", "u1@mail.com", "p")
         ));
 
         userService.unregisterUser("U1", null, null);
