@@ -27,6 +27,7 @@ import java.util.Scanner;
  * @author Asil
  * @version 1.0
  */
+
 public class ConsoleMenu {
 
     private final AuthService authService;
@@ -49,6 +50,7 @@ public class ConsoleMenu {
      * @param fineService     fine calculation and payment service
      * @param reminderService overdue email reminder service
      */
+
     public ConsoleMenu(AuthService authService,
                        UserService userService,
                        BookService bookService,
@@ -70,6 +72,7 @@ public class ConsoleMenu {
      * Runs the main loop of the console menu, showing the main options
      * and dispatching user actions until the user chooses to exit.
      */
+
     public void run() {
         boolean running = true;
 
@@ -132,6 +135,7 @@ public class ConsoleMenu {
      * trigger any actions.
      * </p>
      */
+
     private void printMainMenu() {
         System.out.println("\n=== Library System ===");
         System.out.println("1. Admin login");
@@ -160,6 +164,7 @@ public class ConsoleMenu {
      * If an admin is already logged in, the method simply notifies the user.
      * </p>
      */
+
     private void handleAdminLogin() {
         if (authService.isAdminLoggedIn()) {
             System.out.println("An admin is already logged in: "
@@ -191,6 +196,7 @@ public class ConsoleMenu {
      * If a librarian is already logged in, the method notifies the user.
      * </p>
      */
+
     private void handleLibrarianLogin() {
         if (authService.isLibrarianLoggedIn()) {
             System.out.println("A librarian is already logged in: "
@@ -218,6 +224,7 @@ public class ConsoleMenu {
      * If no authenticated staff member exists, the method simply displays a message.
      * </p>
      */
+
     private void handleLogout() {
         if (!authService.isAdminLoggedIn() && !authService.isLibrarianLoggedIn()) {
             System.out.println("No admin or librarian is currently logged in.");
@@ -238,6 +245,7 @@ public class ConsoleMenu {
      * Displays success or error messages based on registration outcome.
      * </p>
      */
+
     private void handleUserSignup() {
         System.out.println("\n=== User Sign Up ===");
 
@@ -269,6 +277,7 @@ public class ConsoleMenu {
      * If a user is already logged in, the method simply notifies the user.
      * </p>
      */
+
     private void handleUserLogin() {
         if (authService.isUserLoggedIn()) {
             System.out.println("Already logged in as: " + authService.getCurrentUser().getName());
@@ -302,6 +311,7 @@ public class ConsoleMenu {
      * Displays success or failure messages depending on whether the book already exists.
      * </p>
      */
+
     private void handleAddBook() {
         if (!authService.isAdminLoggedIn()) {
             System.out.println("You must login as admin to add books.");
@@ -332,6 +342,7 @@ public class ConsoleMenu {
      * the appropriate {@link BookService} method.
      * </p>
      */
+
     private void handleSearchBook() {
         System.out.println("\nSearch by:");
         System.out.println("1. Title");
@@ -369,6 +380,7 @@ public class ConsoleMenu {
      *
      * @param books the list of matching books
      */
+
     private void searchAndPrintBooks(List<Book> books) {
         if (books.isEmpty()) {
             System.out.println("No matching books found.");
@@ -385,6 +397,7 @@ public class ConsoleMenu {
      *
      * @param b the book to print
      */
+
     private void printBook(Book b) {
         System.out.println("- ID: " + b.getId()
                 + " | Title: " + b.getTitle()
@@ -409,6 +422,7 @@ public class ConsoleMenu {
      * Displays success messages with loan details, or error messages if borrowing fails.
      * </p>
      */
+
     private void handleBorrowBook() {
         System.out.println("\n=== Borrow Item (Book / CD) ===");
 
@@ -466,6 +480,7 @@ public class ConsoleMenu {
      * If no overdue loans exist, a message is displayed instead.
      * </p>
      */
+
     private void handleViewOverdueLoans() {
         if (!authService.isLibrarianLoggedIn()) {
             System.out.println("You must login as librarian to view overdue loans.");
@@ -498,6 +513,7 @@ public class ConsoleMenu {
      * If the user has no outstanding fines or is not logged in, a message is shown.
      * </p>
      */
+
     private void handlePayFine() {
         System.out.println("\n=== Pay Fine ===");
 
@@ -547,6 +563,7 @@ public class ConsoleMenu {
      * if something fails.
      * </p>
      */
+
     private void handleSendOverdueReminders() {
         if (!authService.isAdminLoggedIn()) {
             System.out.println("You must login as admin to send overdue reminders.");
@@ -573,6 +590,7 @@ public class ConsoleMenu {
      * Otherwise, each loan's key information (ID, book/media ID, dates) is printed.
      * </p>
      */
+
     private void handleViewMyLoans() {
         if (!authService.isUserLoggedIn()) {
             System.out.println("You must log in as a user to view your loans.");
@@ -610,6 +628,7 @@ public class ConsoleMenu {
      * user has unpaid fines or outstanding loans.
      * </p>
      */
+
     private void handleUnregisterUser() {
         System.out.println("\n=== Unregister User ===");
 
