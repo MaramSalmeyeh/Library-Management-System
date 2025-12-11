@@ -1,39 +1,35 @@
-/target/
+### Maven ###
+target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
-dependency-reduced-pom.xml
-build.log
-.mvn/wrapper/maven-wrapper.jar
+pom.xml.next
+release.properties
+
+### IntelliJ IDEA ###
 .idea/
 *.iml
 *.iws
+*.ipr
 out/
-.classpath
-.project
-.settings/
-.vscode/
-*.class
+
+### Logs ###
 *.log
-*.ctxt
-hs_err_pid*
-replay_pid*
-Thumbs.db
-Desktop.ini
+
+### OS Files ###
 .DS_Store
-*.swp
-*.swo
-*.tmp
-*.bak
+Thumbs.db
+
+### Java ###
+*.class
+
+### JaCoCo Reports ###
+# لا ترفعي تقارير جاكوكو
+target/site/
+target/jacoco.exec
+
+### Env files ###
 .env
-*.env
-/target/site/apidocs/
-/apidocs/
-/docs/javadoc/
-/javadoc/
-*.html
-*.css
-*.js
-/target/site/jacoco/
-/target/surefire-reports/
-/target/failsafe-reports/
+
+### Test output folders (في حال IntelliJ أنشأتهم) ###
+test/
