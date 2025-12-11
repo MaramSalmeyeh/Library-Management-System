@@ -7,28 +7,18 @@ import com.library.domain.MediaType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Service responsible for managing fines within the library system.
- * <p>
- * This includes:
- * <ul>
- *     <li>Fetching user fines</li>
- *     <li>Calculating overdue fines using {@link FineCalculator}</li>
- *     <li>Creating fines for overdue items</li>
- *     <li>Processing fine payments</li>
- *     <li>Checking whether a user still owes money</li>
- * </ul>
-
- *
- * <p>
- * All fine data is persisted through {@link FileStorage}.
- * </p>
- *
- * @author Maram
- * @version 1.0
  */
 public class FineService {
+
+    /**
+     * Logger for diagnostic information instead of System.out.
+     */
+    private static final Logger LOGGER = Logger.getLogger(FineService.class.getName());
 
     /**
      * Storage handler for loading and saving fine records.
@@ -87,26 +77,28 @@ public class FineService {
         double total = 0.0;
 
         for (Fine f : storage.loadFines()) {
-            System.out.println("checking fine: id=" + f.getId()
-                    + ", userId=[" + f.getUserId() + "]"
-                    + ", amount=" + f.getAmount()
-                    + ", paid=" + f.isPaid());
+
+            // بدل System.out debug نستخدم لوجر بمستوى FINE
+            LOGGER.fine(() ->
+                    "Checking fine: id=" + f.getId()
+                            + ", userId=[" + f.getUserId() + "]"
+                            + ", amount=" + f.getAmount()
+                            + ", paid=" + f.isPaid()
+            );
 
             if (f.getUserId().trim().equals(userId.trim()) && !f.isPaid()) {
                 total += f.getAmount();
             }
         }
 
-        System.out.println("total outstanding = " + total);
+        // بدل System.out.println
+        LOGGER.log(Level.INFO, "Total outstanding for user {0} = {1}", new Object[]{userId, total});
+
         return total;
     }
 
     /**
      * Creates a new fine with a specific amount.
-     *
-     * @param userId the ID of the fined user
-     * @param amount the amount of the fine
-     * @return the created {@link Fine}
      */
     public Fine createFine(String userId, double amount) {
         List<Fine> fines = storage.loadFines();
@@ -120,12 +112,6 @@ public class FineService {
 
     /**
      * Creates a fine for an overdue item based on media type and number of overdue days.
-     * Fine calculation is delegated to {@link FineCalculator}.
-     *
-     * @param userId      borrower user ID
-     * @param mediaType   type of borrowed item (BOOK or CD)
-     * @param overdueDays number of days overdue
-     * @return the created fine, or null if the calculated amount is zero
      */
     public Fine createFineForOverdue(String userId, MediaType mediaType, long overdueDays) {
         double amount = fineCalculator.calculate(mediaType, overdueDays);
@@ -137,14 +123,6 @@ public class FineService {
 
     /**
      * Pays a portion or all of a user's outstanding fines.
-     * <p>
-     * Payment is applied to the oldest fines first.
-     * Fines that are fully paid are marked as paid and set to amount = 0.
-     * </p>
-     *
-     * @param userId       user ID making the payment
-     * @param amountToPay  amount the user is paying
-     * @return new outstanding balance after the payment
      */
     public double payFine(String userId, double amountToPay) {
         if (amountToPay <= 0) {
