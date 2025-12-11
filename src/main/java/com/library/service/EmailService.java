@@ -4,55 +4,24 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Service responsible for sending email notifications using SMTP.
- * <p>
- * This class uses Gmail's SMTP server with TLS encryption to send emails.
- * The username and password provided must correspond to an application
- * password (App Password), not the user's regular Gmail password.
- * </p>
- *
- * <p>
- * Used by {@link com.library.service.ReminderService} for sending overdue reminders
- * and can be used for other system notifications.
- * </p>
- *
- * @author Maram
- * @version 1.0
  */
 public class EmailService {
 
-    /**
-     * The email address used as the sender.
-     */
-    private final String username;
+    private static final Logger LOGGER = Logger.getLogger(EmailService.class.getName());
 
-    /**
-     * The app-specific password used for SMTP authentication.
-     */
+    private final String username;
     private final String password;
 
-    /**
-     * Creates a new EmailService using the provided SMTP credentials.
-     *
-     * @param username the sender email address
-     * @param password the app password for SMTP authentication
-     */
     public EmailService(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    /**
-     * Sends an email message using Gmail SMTP.
-     *
-     * @param to      recipient email address
-     * @param subject email subject
-     * @param body    plain text email body
-     *
-     * @throws RuntimeException if the email fails to send
-     */
     public void sendEmail(String to, String subject, String body) {
 
         Properties props = new Properties();
@@ -78,10 +47,15 @@ public class EmailService {
             message.setText(body);
 
             Transport.send(message);
-            System.out.println("Email sent successfully to " + to);
+
+            // Replaced System.out.println
+            LOGGER.info("Email sent successfully to " + to);
 
         } catch (MessagingException e) {
-            e.printStackTrace();
+
+            // Replaced printStackTrace
+            LOGGER.log(Level.SEVERE, "Failed to send email", e);
+
             throw new RuntimeException("Failed to send email", e);
         }
     }
