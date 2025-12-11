@@ -23,6 +23,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'zulu'
+          cache: maven
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
@@ -43,6 +44,10 @@ jobs:
 
       - name: SonarCloud Scan
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B sonar:sonar \
-          -Dsonar.projectKey=MaramSalmeyeh_Library-Management-System\-Dsonar.organization=maramsalmeyeh\-Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.projectKey=MaramSalmeyeh_Library-Management-System \
+          -Dsonar.organization=maramsalmeyeh \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
