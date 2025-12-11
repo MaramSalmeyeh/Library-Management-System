@@ -108,7 +108,7 @@ public class FileStorage {
                 admins.add(new Admin(id, name, email, password));
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load admins", e);
+            throw new StorageException("Failed to load admins", e);
         }
         return admins;
     }
@@ -135,7 +135,7 @@ public class FileStorage {
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save admins", e);
+            throw new StorageException("Failed to save admins", e);
         }
     }
 
@@ -166,7 +166,7 @@ public class FileStorage {
                 librarians.add(new Librarian(id, name, email, password));
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load librarians", e);
+            throw new StorageException("Failed to load librarians", e);
         }
         return librarians;
     }
@@ -200,7 +200,7 @@ public class FileStorage {
                 users.add(new User(id, name, email, password));
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load users.txt", e);
+            throw new StorageException("Failed to load users.txt", e);
         }
         return users;
     }
@@ -227,7 +227,7 @@ public class FileStorage {
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save users.txt", e);
+            throw new StorageException("Failed to save users.txt", e);
         }
     }
 
@@ -259,7 +259,7 @@ public class FileStorage {
                 books.add(new Book(id, title, author, isbn, borrowed));
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load books", e);
+            throw new StorageException("Failed to load books", e);
         }
         return books;
     }
@@ -287,7 +287,7 @@ public class FileStorage {
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save books", e);
+            throw new StorageException("Failed to save books", e);
         }
     }
 
@@ -328,7 +328,7 @@ public class FileStorage {
                 loans.add(new Loan(id, userId, bookId, borrowDate, dueDate, returnDate, mediaType));
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load loans", e);
+            throw new StorageException("Failed to load loans", e);
         }
         return loans;
     }
@@ -362,7 +362,7 @@ public class FileStorage {
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save loans", e);
+            throw new StorageException("Failed to save loans", e);
         }
     }
 
@@ -395,7 +395,7 @@ public class FileStorage {
                 fines.add(new Fine(id, userId, amount, paid));
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load fines.txt", e);
+            throw new StorageException("Failed to load fines.txt", e);
         }
         return fines;
     }
@@ -422,7 +422,7 @@ public class FileStorage {
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save fines.txt", e);
+            throw new StorageException("Failed to save fines.txt", e);
         }
     }
 
