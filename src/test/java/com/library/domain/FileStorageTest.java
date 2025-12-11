@@ -38,6 +38,7 @@ class FileStorageTest {
         assertEquals("pwd", u.getPassword());
     }
 
+
     @Test
     void saveAndLoadAdmins_roundTrip() {
         FileStorage storage = newStorage();
@@ -249,7 +250,7 @@ class FileStorageTest {
     @Test
     void loadLoans_skipsInvalidShortLine() throws IOException {
         Path f = tempDir.resolve("loans.txt");
-        Files.writeString(f, "L1;U1");   // parts < 6
+        Files.writeString(f, "L1;U1");
 
         FileStorage storage = newStorage();
         assertTrue(storage.loadLoans().isEmpty());
@@ -267,7 +268,7 @@ class FileStorageTest {
     @Test
     void loadFines_skipsInvalidLine() throws IOException {
         Path f = tempDir.resolve("fines.txt");
-        Files.writeString(f, "F1;U1");  // missing parts
+        Files.writeString(f, "F1;U1");
 
         FileStorage storage = newStorage();
         assertTrue(storage.loadFines().isEmpty());
@@ -285,6 +286,37 @@ class FileStorageTest {
         assertTrue(fines.get(0).isPaid());
     }
 
+    @Test
+    void loadAdmins_whenIoError_wrapsInStorageException() throws IOException {
+
+        Path adminsPath = tempDir.resolve("admins.txt");
+        Files.createDirectory(adminsPath);
+
+        FileStorage storage = newStorage();
+
+        StorageException ex = assertThrows(
+                StorageException.class,
+                storage::loadAdmins
+        );
+
+        assertTrue(ex.getMessage().contains("Failed to load admins"));
+    }
+    @Test
+    void saveAdmins_whenIoError_wrapsInStorageException() throws IOException {
+
+        Path adminsPath = tempDir.resolve("admins.txt");
+        Files.createDirectory(adminsPath);
+
+        FileStorage storage = newStorage();
+        List<Admin> admins = List.of(
+                new Admin("A1", "Admin", "admin@example.com", "a")
+        );
+
+        assertThrows(
+                StorageException.class,
+                () -> storage.saveAdmins(admins)
+        );
+    }
 
 
 
