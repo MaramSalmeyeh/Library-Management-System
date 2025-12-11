@@ -5,31 +5,14 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
 release.properties
-
-### IntelliJ IDEA ###
 .idea/
 *.iml
 *.iws
 *.ipr
 out/
-
-### Logs ###
 *.log
-
-### OS Files ###
-.DS_Store
-Thumbs.db
-
-### Java ###
 *.class
-
-### JaCoCo Reports ###
-# لا ترفعي تقارير جاكوكو
 target/site/
 target/jacoco.exec
-
-### Env files ###
 .env
 
-### Test output folders (في حال IntelliJ أنشأتهم) ###
-test/
